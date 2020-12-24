@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,600');
+
+*{
+  margin: 0px;
+}
+body {
+  padding: 0px;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 400;
+  background: #fff;
+  text-decoration: none;
+  color: black;
+}
+/*===========
+NAVBAR
+===========*/
+.logout a{
+  text-decoration: none;
+  color: black;
+}
+.logout a:hover{
+  text-decoration: none;
+  color: white;
+}
+.grid {
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: 1fr auto minmax (600px, 4fr) 1fr;
+  border-bottom: 2px solid #707070;
+  align-items: center;
+  background-color: #73a6f3;
+  position: fixed;
+  width: 100%;
+  padding: 10px 0px;
+  top:0px;
+}
+
+.logo {
+  margin-left: 20px;
+  grid-column: 1/2;
+}
+
+.title {
+  grid-column: 2/3;
+  text-align: center;
+}
+
+.logout {
+  grid-column: 3/4;
+  text-decoration: none;
+  text-align: right;
+  margin-right: 20px;
+}
+
+/*===========
+CONTRACTS
+===========*/
+
+.contractContainer{
+  border: solid #707070 2px;
+  margin: 30px 50px;
+  padding: 15px 30px;
+  border-radius: 20px;
+  background-color: #ffffff;
+}
+
+.contractName {
+  border-radius: 10px;
+  background-color: #73a6f3;
+  position: relative;
+  top: -30px;
+  width: fit-content;
+  padding: 2px 8px;
+}
+
+.contractContainer input {
+  margin: 20px auto 0px auto ;
+  border-radius: 5px;
+  display: block;
+  width: 30%;
+  height: 2em;
+  border: none;
+  font-size: 1em;
+  position: relative;
+  border: solid #707070 0.5px;
+}
+
+.contractContainer button {
+  border: solid #707070 0.5px;
+  border-radius: 10px;
+  display: block;
+  margin: 10px auto 0px auto ;
+  font-size: 1.5em;
+  background-color: #73a6f3;
+}
+
+.contractContainer input::placeholder {
+  padding-left: 5px;
+}
+
+.cOne {
+  margin-top: 100px;
+}
+/*===========
+FOOTER
+===========*/
+
+.footer {
+  background-color: #7c93aa;
+  color: #00000075;
+  position: sticky;
+  width: 100%;
+  bottom: 0px;
+  padding: 10px 0px;
+  text-align: center;
+}
