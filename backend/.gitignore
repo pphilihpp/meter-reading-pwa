@@ -1,0 +1,3 @@
+vars/
+node_modules/
+.env
