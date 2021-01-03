@@ -12,7 +12,7 @@ require('dotenv').config({ path: './vars/.env' });
 const user = process.env.API_USERNAME;
 const pass = process.env.API_PASSWORD;
 const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
-let cookieData = '';
+let cookieToken = '';
 
 
 //Body Parser
@@ -20,47 +20,98 @@ router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
 
-
-//Login Route
+/*
+*********************************
+POST Requests to API
+*********************************
+Login - Auth*/
 router.post('/login', async (req, res, next) => {
   const userData = {
       username: req.body.username,
       password: req.body.password
   }
 
-  const response = await axios({
+  await axios({
     method: 'POST',
     withCredentials: true,
     url: process.env.API_URL + '/app/session',
     headers: {  'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
     data: userData
   })
-  .catch(err => {
-    console.log(err);
-  });
+  .then(resp => {
+    //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
 
-  try {
-    console.log(response.headers);
-    console.log(response.headers['x-token']);
-    cookieData = response.headers['set-cookie'];
-  } catch(err) {
-    console.log('Error: ' + err);
-  }
+    res.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+    cookieToken = resp.headers['set-cookie'];
+
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err);
+  });
 
 });
 
-
-//GET Request - Contract Overview
-router.get('/contracts', async (req, res) => {
+/*
+*********************************
+GET Requests to API
+*********************************
+Meter-Reading Data for all Contracts
+Example: http://localhost:3000/meter-reading*/
+router.get('/meter-reading', async (req, res) => {
   const response = await axios({
     method: 'GET',
     withCredentials: true,
     url: process.env.API_URL + '/app/meter-reading',
-    headers: { 'Cookie': cookieData, 'Authorization': `Basic ${auth}` }
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
   })
-  //.then(resp => console.log(resp.data));
+  .then(resp => {
+    res.send(resp.data);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err);
+  });
 
-  res.send(response.data);
+});
+
+//Meter-Reading Data for one Contract
+//Example: http://localhost:3000/meter-reading/contract-accounts/000800005001
+router.get('/meter-reading/contract-accounts/:contract', async (req, res) => {
+  await axios({
+    method: 'GET',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/meter-reading/contract-accounts/' + req.params.contract,
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
+  })
+  .then(resp => {
+    res.send(resp.data);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err.response.status);
+  });
+});
+
+/*
+*********************************
+DELETE Requests to API
+*********************************
+Logout
+Example: http://localhost:3000/logout */
+router.get('/logout', async (req, res) => {
+  await axios({ 
+    method: 'DELETE',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/session',
+    headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json', 'Cookie': cookieToken, 'X-Token': '' },
+    data: '' 
+  })
+  .then(resp =>{ 
+    res.send('Logout erfolgreich' );
+    console.log('Logout erfolgreich');
+    console.log('Status: ' + resp.status);
+  })
+  .catch(err => console.log('Error: Status ' + err.response.status));
 });
 
 module.exports = router;
+
+
