@@ -14,6 +14,7 @@ body {
 /*===========
 NAVBAR
 ===========*/
+/*
 .logout a{
   text-decoration: none;
   color: black;
@@ -51,11 +52,43 @@ NAVBAR
   text-align: right;
   margin-right: 20px;
 }
+*/
 
+/*===========
+Login
+===========*/
+
+/*
+.Login {
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-wrap: wrap;
+    display: flex;
+}
+.Login h1 {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #1f263e;
+}
+
+Form {
+    padding: 10px 20px;
+}
+
+a.btn.disabled {
+    background-color: #ced4da;
+    color:black;
+    border: #ced4da;
+}
+*/
 /*===========
 CONTRACTS
 ===========*/
-
+/*
 .contractContainer{
   border: solid #707070 2px;
   margin: 30px 50px;
@@ -101,10 +134,11 @@ CONTRACTS
 .cOne {
   margin-top: 100px;
 }
+*/
 /*===========
 FOOTER
 ===========*/
-
+/*
 .footer {
   background-color: #7c93aa;
   color: #00000075;
@@ -114,3 +148,4 @@ FOOTER
   padding: 10px 0px;
   text-align: center;
 }
+*/
