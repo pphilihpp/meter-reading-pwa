@@ -1,61 +1,117 @@
 const express       = require('express');
 const router        = express();
 const bodyParser    = require('body-parser');
-const fetch         = require('node-fetch');
+const axios         = require('axios');
 
 //Dotenv -> .env Files
 require('dotenv').config({ path: './vars/.env' });
+
+
+//Variables
+//User - Authenitcation
+const user = process.env.API_USERNAME;
+const pass = process.env.API_PASSWORD;
+const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
+let cookieToken = '';
 
 
 //Body Parser
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
-//Authentication
-router.post('/login', async (req, res) => {
-    const user = process.env.API_USERNAME;
-    const pass = process.env.API_PASSWORD;
-    const userData = {
-            username: req.body.username,
-            password: req.body.password
-    }
-    const url = process.env.API_URL + '/app/session';
-    const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
 
-    const response = await fetch(url, {
-        method: 'POST',
-        //credentials: 'include',
-        headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json;charset=UTF-8'},
-        body: JSON.stringify(userData)
-      })
-      .then(resp => resp.json())
-      .catch(err => res.json({message: err}));
-      //.catch(err => console.log(err));
-    res.json(response);
-    //console.log(response);
-});
+/*
+*********************************
+POST Requests to API
+*********************************
+Login - Auth*/
+router.post('/login', async (req, res, next) => {
+  const userData = {
+      username: req.body.username,
+      password: req.body.password
+  }
 
-//Testing - GET-Data from API
-router.get('/contracts', async (req, res) => {
-    const url = process.env.API_URL + '/app/meter-reading';
+  await axios({
+    method: 'POST',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/session',
+    headers: {  'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
+    data: userData
+  })
+  .then(resp => {
+    //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
 
-    const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
+    res.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+    cookieToken = resp.headers['set-cookie'];
 
-    const user = process.env.API_USERNAME;
-    const pass = process.env.API_PASSWORD;
-
-    const response = await fetch(url, {
-        method: 'GET',
-        //credentials: 'include',
-        headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json;charset=UTF-8' }
-      })
-      .then(res => res.json())
-      .catch(err => res.json({ message: err }));
-
-      //res.json(response[0]);
-      console.log(response[0]);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err);
+  });
 
 });
 
+/*
+*********************************
+GET Requests to API
+*********************************
+Meter-Reading Data for all Contracts
+Example: http://localhost:3000/meter-reading*/
+router.get('/meter-reading', async (req, res) => {
+  const response = await axios({
+    method: 'GET',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/meter-reading',
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
+  })
+  .then(resp => {
+    res.send(resp.data);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err);
+  });
+
+});
+
+//Meter-Reading Data for one Contract
+//Example: http://localhost:3000/meter-reading/contract-accounts/000800005001
+router.get('/meter-reading/contract-accounts/:contract', async (req, res) => {
+  await axios({
+    method: 'GET',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/meter-reading/contract-accounts/' + req.params.contract,
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
+  })
+  .then(resp => {
+    res.send(resp.data);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err.response.status);
+  });
+});
+
+/*
+*********************************
+DELETE Requests to API
+*********************************
+Logout
+Example: http://localhost:3000/logout */
+router.get('/logout', async (req, res) => {
+  await axios({ 
+    method: 'DELETE',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/session',
+    headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json', 'Cookie': cookieToken, 'X-Token': '' },
+    data: '' 
+  })
+  .then(resp =>{ 
+    res.send('Logout erfolgreich' );
+    console.log('Logout erfolgreich');
+    console.log('Status: ' + resp.status);
+  })
+  .catch(err => console.log('Error: Status ' + err.response.status));
+});
 
 module.exports = router;
+
+
