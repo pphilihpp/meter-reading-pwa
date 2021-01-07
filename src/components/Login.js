@@ -9,23 +9,6 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    //============
-    //Variables
-    //User - Authenitcation
-    const user = "techlabs";
-    //process.env.API_USERNAME;
-    const pass = "Ju59W!84";
-    //process.env.API_PASSWORD;
-    const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
-    let cookieToken = '';
-
-    const userData = {
-        username: "techlabs",
-        password: "Ju59W!84"
-    }
-  
-    //===========
-
 
     function validateForm() {
         return username.length > 0 && password.length > 0;
@@ -33,25 +16,8 @@ function Login() {
     }
     
 
-    async function handleSubmit(e){
+    function handleSubmit(e){
         e.preventDefault();
-        await axios({
-            method: 'POST',
-            withCredentials: true,
-            url: "https://cos.bpc.ag/portal/app/session",
-            //url: process.env.API_URL + '/app/session',
-            headers: {  'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
-            data: userData
-          })
-          .then(resp => {
-            //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-            //resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
-            console.log(resp.data);
-            //cookieToken = resp.headers['set-cookie'];
-          })
-          .catch(err => {
-            console.log('Error: Status ' + err);
-          });
     }
 
     return (

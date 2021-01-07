@@ -7,22 +7,22 @@ const Contract = () => {
     var [meterInput, setMeterInput] = useState("");
     var [dateInput, setDateInput] = useState("");
 
-    //============
-    //Variables
-    //User - Authenitcation
-    const user = "techlabs";
-    //process.env.API_USERNAME;
-    const pass = "Ju59W!84";
-    //process.env.API_PASSWORD;
-    const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
-    //let cookieToken = '';
+            //============
+        //Variables
+        //User - Authenitcation
+        const user = "techlabs";
+        //process.env.API_USERNAME;
+        const pass = "Ju59W!84";
+        //process.env.API_PASSWORD;
+        const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
+        //let cookieToken = '';
 
-    const userData = {
-        username: "techlabs",
-        password: "Ju59W!84"
-    }
-  
-    //===========
+        const userData = {
+            username: "techlabs",
+            password: "Ju59W!84"
+        }
+    
+        //===========
 
     const handleSubmit=async (e) => {
         e.preventDefault();
@@ -37,7 +37,9 @@ const Contract = () => {
             withCredentials: true,
             url: "https://cos.bpc.ag/portal/app/session",
             //url: process.env.API_URL + '/app/session',
-            headers: {  'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
+            headers: {  
+                'Authorization': `Basic ${auth}`,
+                'Content-Type': 'application/json'},
             data: userData
           })
           .then(resp => {

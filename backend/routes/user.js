@@ -40,7 +40,7 @@ router.post('/login', async (req, res, next) => {
   })
   .then(resp => {
     //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-
+    console.log(resp.data);
     res.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
     cookieToken = resp.headers['set-cookie'];
 
