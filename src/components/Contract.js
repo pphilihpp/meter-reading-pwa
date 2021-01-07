@@ -7,9 +7,24 @@ const Contract = () => {
     var [meterInput, setMeterInput] = useState("");
     var [dateInput, setDateInput] = useState("");
 
-    
+    //============
+    //Variables
+    //User - Authenitcation
+    const user = "techlabs";
+    //process.env.API_USERNAME;
+    const pass = "Ju59W!84";
+    //process.env.API_PASSWORD;
+    const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
+    //let cookieToken = '';
 
-    const handleSubmit=(e) => {
+    const userData = {
+        username: "techlabs",
+        password: "Ju59W!84"
+    }
+  
+    //===========
+
+    const handleSubmit=async (e) => {
         e.preventDefault();
         //submit the current entry
         setMeterInput("");
@@ -17,28 +32,23 @@ const Contract = () => {
 
         //========Axios calls=========
 
-        /**axios.get('https://cos.bpc.ag/portal/app/meter-reading/app/meter-reading')
-        .then(res => {
-            console.log(res);
-            this.setState({
-                post: res.data
-            })
-        })*/
-
-        //===== login ===
-
-       axios.post('https://cos.bpc.ag/portal/app/session', {}, {
-            auth: {
-                username: "techlabs",
-                password: "Ju59W!84"
-            }
-        })
-        .then(res => {
-            console.log(res);
-            /*this.setState({
-                post: res.data
-            })*/
-        })
+        await axios({
+            method: 'POST',
+            withCredentials: true,
+            url: "https://cos.bpc.ag/portal/app/session",
+            //url: process.env.API_URL + '/app/session',
+            headers: {  'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
+            data: userData
+          })
+          .then(resp => {
+            //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
+            //resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+            console.log(resp.data);
+            //cookieToken = resp.headers['set-cookie'];
+          })
+          .catch(err => {
+            console.log('Error: Status ' + err);
+          });
     }
 
 
