@@ -1,17 +1,44 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 const Contract = () => {
 
     var [meterInput, setMeterInput] = useState("");
     var [dateInput, setDateInput] = useState("");
 
+    
 
     const handleSubmit=(e) => {
         e.preventDefault();
         //submit the current entry
         setMeterInput("");
         setDateInput("");
+
+        //========Axios calls=========
+
+        /**axios.get('https://cos.bpc.ag/portal/app/meter-reading/app/meter-reading')
+        .then(res => {
+            console.log(res);
+            this.setState({
+                post: res.data
+            })
+        })*/
+
+        //===== login ===
+
+       axios.post('https://cos.bpc.ag/portal/app/session', {}, {
+            auth: {
+                username: "techlabs",
+                password: "Ju59W!84"
+            }
+        })
+        .then(res => {
+            console.log(res);
+            /*this.setState({
+                post: res.data
+            })*/
+        })
     }
 
 
@@ -65,6 +92,7 @@ const ContractContainer = styled.div`
 
 const ContractHead = styled.div`
     display: grid;
+    margin-left: 5px;
     grid-template-columns: 5fr 1fr;
     border-bottom: solid 1px #587494;
     font-size: 12px;
@@ -89,7 +117,9 @@ const ContractSymbol = styled.span`
 const DropdownSymbol = styled.div`
 `
 
-/**============*/
+/**======
+ * Body Part
+ * ======*/
 const ContractWrapper = styled.div`
     background: rgba(172, 179, 191, 0.2);
     padding: 0 15px 10px;

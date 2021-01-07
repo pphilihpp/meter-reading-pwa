@@ -15,7 +15,7 @@ export default Footer
 
 const FooterWrapper = styled.div`
     background-color: #7c93aa;
-    color: #00000075;
+    color: #000000;
     position: sticky;
     width: 100%;
     bottom: 0px;
