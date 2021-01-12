@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import {Button} from './Button'
+//import {loginPost} from '../../backend/routes/user'
 
 const Contract = () => {
 
@@ -87,7 +89,12 @@ const Contract = () => {
                             <DataType>kWh{/** map dynamic Value? */}</DataType>
                         </BorderWrapper>
                     </MeterInputWrapper>
-                    <Btn onClick={handleSubmit}>Zählerstand eingeben</Btn>
+                    <Button 
+                    as="button"
+                    type="submit"
+                    primary="true"
+                    margin="10px 0 0 0"
+                    onClick={handleSubmit}>Zählerstand eingeben</Button>
                 </DataWrapper>
             </ContractWrapper>
         </ContractContainer>
@@ -183,17 +190,4 @@ const MeterInputWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr 40px;
     grid-gap: 5px;
-`
-
-const Btn = styled.div`
-    display: flex;
-    margin-top: 10px;
-    height: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    color: #fff;
-    background-color: grey;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
 `

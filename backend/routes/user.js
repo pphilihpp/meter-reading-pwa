@@ -58,7 +58,7 @@ GET Requests to API
 Meter-Reading Data for all Contracts
 Example: http://localhost:3000/meter-reading*/
 router.get('/meter-reading', async (req, res) => {
-  const response = await axios({
+await axios({
     method: 'GET',
     withCredentials: true,
     url: process.env.API_URL + '/app/meter-reading',

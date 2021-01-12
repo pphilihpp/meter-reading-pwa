@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import {Button} from './Button'
 import styled from 'styled-components'
-import axios from 'axios'
+//import axios from 'axios'
 
 function Login() {
 
@@ -32,8 +32,13 @@ function Login() {
                 <Form.Label>Passwort:</Form.Label>
                 <Form.Control autoFocus type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </Form.Group>
-            <Button block size="lg" type="submit" disabled={!validateForm()} href="/">
-                Login
+            <Button 
+                as="button"
+                primary="true"
+                type="submit" 
+                disabled={!validateForm()} 
+                to="/">
+                Anmelden
             </Button>
         </Form>
     </LoginContainer>
