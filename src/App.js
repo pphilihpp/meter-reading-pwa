@@ -5,7 +5,9 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import Contract from './components/Contract';
-import Footer from './components/Footer';
+import Faq from './components/Faq'
+import Logout from './components/Logout'
+//import Footer from './components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -14,10 +16,20 @@ function App() {
     <div className="App">
       <Switch>
         <Route path="/login" component={Login} />
-        <Route path="/" >
+        <Route exact path="/" >
           <Navbar />
           <Contract />
-          <Footer />
+          {/* <Footer /> */}
+        </Route>
+        <Route path="/faq">
+          <Navbar />
+          <Faq />
+          {/* <Footer /> */}
+        </Route>
+        <Route path="/logout">
+          <Navbar />
+          <Logout />
+          {/* <Footer /> */}
         </Route>
       </Switch>
       </div>

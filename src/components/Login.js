@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { Link } from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import {Button} from './Button'
 import styled from 'styled-components'
@@ -32,14 +33,15 @@ function Login() {
                 <Form.Label>Passwort:</Form.Label>
                 <Form.Control autoFocus type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </Form.Group>
-            <Button 
-                as="button"
-                primary="true"
-                type="submit" 
-                disabled={!validateForm()} 
-                to="/">
-                Anmelden
-            </Button>
+            <Link to="/">
+                <Button 
+                    primary="true"
+                    type="submit" 
+                    disabled={!validateForm()} 
+                    >
+                    Anmelden
+                </Button>
+            </Link>
         </Form>
     </LoginContainer>
     )
@@ -55,7 +57,8 @@ const LoginContainer = styled.div`
     overflow: hidden;
     flex-wrap: wrap;
     display: flex;
-    padding: calc((100vw - 1300px) / 2);
+    padding: 0 5px;
+    /* padding: calc((100vw - 1300px) / 2); */
 `
 /*      const LoginWrapper = styled.div`      
 `

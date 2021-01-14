@@ -6,9 +6,9 @@ const Navbar = () => {
     return (
         <div>
             <Nav>
-                <NavLink>Zählerstand eingeben</NavLink>
-                <NavLink>Fragen</NavLink>
-                <NavLink to="/login">
+                <NavLink to="/">Zählerstand eingeben</NavLink>
+                <NavLink to="/faq">Fragen</NavLink>
+                <NavLink to="/logout">
                     Logout
                 </NavLink>
             </Nav>
