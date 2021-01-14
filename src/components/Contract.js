@@ -1,17 +1,54 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
+import {Button} from './Button'
 
 const Contract = () => {
 
     var [meterInput, setMeterInput] = useState("");
     var [dateInput, setDateInput] = useState("");
 
+            //============
+        //Variables
+        //User - Authenitcation
+        const user = "techlabs";    //process.env.API_USERNAME;
+        const pass = "Ju59W!84";    //process.env.API_PASSWORD;
+        const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
+        //let cookieToken = '';
 
-    const handleSubmit=(e) => {
+        const userData = {
+            username: "techlabs",
+            password: "Ju59W!84"
+        }
+    
+        //===========
+
+    const handleSubmit=async (e) => {
         e.preventDefault();
         //submit the current entry
         setMeterInput("");
         setDateInput("");
+
+        //========Axios calls=========
+
+        await axios({
+            method: 'POST',
+            withCredentials: true,
+            url: "https://cos.bpc.ag/portal/app/session",       //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+            headers: {
+                'Authorization': `Basic ${auth}`,
+                'Content-Type': 'application/json'},
+            data: userData
+          })
+          .then(resp => {
+            //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
+            //resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+            console.log(resp.data);
+            //cookieToken = resp.headers['set-cookie'];
+          })
+          .catch(err => {
+            console.log('Error: Status ' + err);
+          });
     }
 
 
@@ -31,7 +68,7 @@ const Contract = () => {
                 </Symbols>
             </ContractHead>
             <ContractWrapper>
-                <Details>Type{/** map dynamic Type*/} Vertrag: 013549812 {/** map dynamic ContractId*/}</Details>
+                <Details>Typ{/** map dynamic Type*/} Vertrag: 013549812 {/** map dynamic ContractId*/}</Details>
                 <Details>Zähler: 1234566 {/** map dynamic MeterId*/}</Details>
                 <DataWrapper>
                     <p>Ablesedatum</p>
@@ -48,7 +85,12 @@ const Contract = () => {
                             <DataType>kWh{/** map dynamic Value? */}</DataType>
                         </BorderWrapper>
                     </MeterInputWrapper>
-                    <Btn onClick={handleSubmit}>Zählerstand eingeben</Btn>
+                    <Button 
+                        type="submit"
+                        primary="true"
+                        margin="10px 0 0 0"
+                        onClick={handleSubmit}
+                    >Zählerstand eingeben</Button>
                 </DataWrapper>
             </ContractWrapper>
         </ContractContainer>
@@ -58,13 +100,14 @@ const Contract = () => {
 export default Contract
 
 const ContractContainer = styled.div`
-    min-height: 85vh;
-    margin-top: 40px;
-    padding: 0 calc((100vw - 1300px) / 2);
+    margin-top: 20px;
+    padding: 0 5px;
+    /* padding: 0 calc((100vw - 1300px) / 2); */
 `
 
 const ContractHead = styled.div`
     display: grid;
+    margin-left: 5px;
     grid-template-columns: 5fr 1fr;
     border-bottom: solid 1px #587494;
     font-size: 12px;
@@ -83,25 +126,33 @@ const Symbols = styled.div`
     grid-template-columns: 1fr 1fr;
 `
 const ContractSymbols = styled.div`
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 `
 const ContractSymbol = styled.span`
 `
 const DropdownSymbol = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
-/**============*/
+/**======
+ * Body Part
+ * ======*/
 const ContractWrapper = styled.div`
     background: rgba(172, 179, 191, 0.2);
     padding: 0 15px 10px;
     margin: 10px 10px 10px 30px;
-    border: 1px solid #009AE2;
+    border: 1px solid #587494;
     border-radius: 10px;
     box-sizing: border-box;
     font-size: 10px;
 `
 const Details = styled.div`
     margin-top: 10px;
-    color: #009AE2;
+    color: #587494;
     font-weight: bold;
 `
 
@@ -132,26 +183,14 @@ const DataType = styled.div`
     justify-content: center;
     font-weight: 500;
 `
-const Input = styled.div`
+const Input = styled.input`
     height: 25px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 10px;
+    padding-left: 5px;
 `
 const MeterInputWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr 40px;
     grid-gap: 5px;
-`
-
-const Btn = styled.div`
-    display: flex;
-    margin-top: 10px;
-    height: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    color: #fff;
-    background-color: grey;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
 `

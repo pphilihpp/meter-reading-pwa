@@ -40,7 +40,7 @@ router.post('/login', async (req, res, next) => {
   })
   .then(resp => {
     //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-
+    console.log(resp.data);
     res.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
     cookieToken = resp.headers['set-cookie'];
 
@@ -58,7 +58,7 @@ GET Requests to API
 Meter-Reading Data for all Contracts
 Example: http://localhost:3000/meter-reading*/
 router.get('/meter-reading', async (req, res) => {
-  const response = await axios({
+await axios({
     method: 'GET',
     withCredentials: true,
     url: process.env.API_URL + '/app/meter-reading',
