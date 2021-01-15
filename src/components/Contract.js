@@ -11,14 +11,14 @@ const Contract = () => {
             //============
         //Variables
         //User - Authenitcation
-        const user = "techlabs";    //process.env.API_USERNAME;
-        const pass = "Ju59W!84";    //process.env.API_PASSWORD;
+        const user = process.env.REACT_APP_API_USERNAME;
+        const pass = process.env.REACT_APP_API_PASSWORD;
         const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
         //let cookieToken = '';
 
         const userData = {
-            username: "techlabs",
-            password: "Ju59W!84"
+            username: user,
+            password: pass
         }
     
         //===========
@@ -28,7 +28,7 @@ const Contract = () => {
         //submit the current entry
         setMeterInput("");
         setDateInput("");
-
+        console.log(userData);
         //========Axios calls=========
 
         await axios({
