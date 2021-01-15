@@ -2,6 +2,11 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import {Button} from './Button'
+import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined';
+import WhatshotIcon from '@material-ui/icons/Whatshot';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
+import grey from '@material-ui/core/colors/grey';
 
 const Contract = () => {
 
@@ -11,14 +16,14 @@ const Contract = () => {
             //============
         //Variables
         //User - Authenitcation
-        const user = "techlabs";    //process.env.API_USERNAME;
-        const pass = "Ju59W!84";    //process.env.API_PASSWORD;
+        const user = process.env.REACT_APP_API_USERNAME;
+        const pass = process.env.REACT_APP_API_PASSWORD;
         const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
-        //let cookieToken = '';
+        let cookieToken = '';
 
         const userData = {
-            username: "techlabs",
-            password: "Ju59W!84"
+            username: user,
+            password: pass
         }
     
         //===========
@@ -28,27 +33,27 @@ const Contract = () => {
         //submit the current entry
         setMeterInput("");
         setDateInput("");
-
+        console.log(userData);
         //========Axios calls=========
-
         await axios({
             method: 'POST',
             withCredentials: true,
-            url: "https://cos.bpc.ag/portal/app/session",       //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+            url: process.env.REACT_APP_API_URL + '/app/session',       //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
             headers: {
                 'Authorization': `Basic ${auth}`,
                 'Content-Type': 'application/json'},
             data: userData
-          })
-          .then(resp => {
-            //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-            //resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
-            console.log(resp.data);
-            //cookieToken = resp.headers['set-cookie'];
-          })
-          .catch(err => {
-            console.log('Error: Status ' + err);
-          });
+            })
+            .then(resp => {
+                    console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
+                    resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+                    console.log(resp.data);
+                    cookieToken = resp.headers['set-cookie'];
+                    console.log(cookieToken)
+            })
+            .catch(err => {
+                console.log('Error: Status ' + err);
+            });
     }
 
 
@@ -61,10 +66,10 @@ const Contract = () => {
                 </ContractInfo>
                 <Symbols>
                     <ContractSymbols>
-                        <ContractSymbol>S{/** map dynamic gas Icon */}</ContractSymbol>
-                        <ContractSymbol>G{/** map dynamic electricity Icon */}</ContractSymbol>
+                        <ContractSymbol><PowerOutlinedIcon />{/** map dynamic gas Icon */}</ContractSymbol>
+                        <ContractSymbol><WhatshotIcon />{/** map dynamic electricity Icon */}</ContractSymbol>
                     </ContractSymbols>
-                    <DropdownSymbol>V{/** map dynamic Icon */}</DropdownSymbol>
+                    <ExpandIconWrapper><ExpandMoreIcon style={{ fontSize: 40 }}/></ExpandIconWrapper>
                 </Symbols>
             </ContractHead>
             <ContractWrapper>
@@ -74,7 +79,7 @@ const Contract = () => {
                     <p>Ablesedatum</p>
                     <DateInputWrapper>
                         <BorderWrapper>
-                            <DataType>K{/** map dynamic Calendar Icon */}</DataType>
+                            <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
                         </BorderWrapper>
                     <Input type="date" onChange={(e) => setDateInput(e.target.value)} value={dateInput} placeholder="Z.B. 01.01.2021"/>
                     </DateInputWrapper>
@@ -89,6 +94,7 @@ const Contract = () => {
                         type="submit"
                         primary="true"
                         margin="10px 0 0 0"
+                        width="100%"
                         onClick={handleSubmit}
                     >Zählerstand eingeben</Button>
                 </DataWrapper>
@@ -110,8 +116,8 @@ const ContractHead = styled.div`
     margin-left: 5px;
     grid-template-columns: 5fr 1fr;
     border-bottom: solid 1px #587494;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     color: #587494;
 `
 const ContractInfo = styled.div`
@@ -132,24 +138,24 @@ const ContractSymbols = styled.div`
 `
 const ContractSymbol = styled.span`
 `
-const DropdownSymbol = styled.div`
+const ExpandIconWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
 `
-
 /**======
  * Body Part
  * ======*/
 const ContractWrapper = styled.div`
     background: rgba(172, 179, 191, 0.2);
     padding: 0 15px 10px;
-    margin: 10px 10px 10px 30px;
-    border: 1px solid #587494;
+    margin: 10px 0px 10px 30px;
+    border: 1.5px solid #587494;
     border-radius: 10px;
     box-sizing: border-box;
-    font-size: 10px;
+    font-size: 14px;
 `
+
 const Details = styled.div`
     margin-top: 10px;
     color: #587494;
@@ -175,20 +181,30 @@ const BorderWrapper = styled.div`
     height: 25px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 10px;
+    background-color: white;
     `
+
+const DateIconWrapper = styled.div`
+    display: flex;
+    align-items:center;
+    justify-content: center;
+`
+
 const DataType = styled.div`
     display: flex;
     height: 100%;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
+    font-weight: 700;
 `
+
 const Input = styled.input`
     height: 25px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding-left: 5px;
 `
+
 const MeterInputWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr 40px;
