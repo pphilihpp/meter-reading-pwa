@@ -1,24 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import {faqData} from '../data/FaqData'
 
 const Faq = () => {
     return (
         <FaqContainer>
-            <QuestionHeader>
-                <QuestionContent>Lorem ipsum dolor sit amet consectetur adipisicing elit.{/** map dynamic data Question */}</QuestionContent>
-                <ExpandIconWrapper><ExpandMoreIcon style={{ fontSize: 30 }}/></ExpandIconWrapper>
-            </QuestionHeader>
-            <AnswerContainer>
-                <Answer>{/** Map dynamic data Answer */}</Answer>
-            </AnswerContainer>
-            <QuestionHeader>
-                <QuestionContent>Lorem ipsum dolor sit amet?{/** map dynamic data Question */}</QuestionContent>
-                <ExpandIconWrapper><ExpandMoreIcon style={{ fontSize: 30 }}/></ExpandIconWrapper> 
-            </QuestionHeader>
-            <AnswerContainer>
-                <Answer>{/** Map dynamic data Answer */}</Answer>
-            </AnswerContainer>
+            {faqData.map((item, index) => (
+                <EntryContainer key={index}>
+                    <QuestionHeader>
+                        <QuestionContent>{item.question}</QuestionContent>
+                        <ExpandIconWrapper><ExpandMoreIcon style={{ fontSize: 30 }}/></ExpandIconWrapper>
+                    </QuestionHeader>
+                    <AnswerContainer>
+                        <Answer>{item.answer}</Answer>
+                    </AnswerContainer>
+                </EntryContainer>
+            ))}
         </FaqContainer>
     )
 }
@@ -27,6 +25,8 @@ export default Faq
 
 const FaqContainer = styled.div`
     padding: 0 5px;
+`
+const EntryContainer = styled.div`
 `
 
 const QuestionHeader = styled.div`
