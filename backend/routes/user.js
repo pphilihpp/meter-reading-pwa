@@ -2,15 +2,18 @@ const express       = require('express');
 const router        = express();
 const bodyParser    = require('body-parser');
 const axios         = require('axios');
+const cors          = require('cors');
 
 //Dotenv -> .env Files
 require('dotenv').config({ path: './vars/.env' });
 
-
+router.use(cors());
 //Variables
 //User - Authenitcation
 const user = process.env.API_USERNAME;
 const pass = process.env.API_PASSWORD;
+
+
 const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
 let cookieToken = '';
 
@@ -25,7 +28,8 @@ router.use(bodyParser.json())
 POST Requests to API
 *********************************
 Login - Auth*/
-router.post('/login', async (req, res, next) => {
+router.post('/login', async (req, res) => {
+
   const userData = {
       username: req.body.username,
       password: req.body.password
@@ -39,10 +43,9 @@ router.post('/login', async (req, res, next) => {
     data: userData
   })
   .then(resp => {
-    //console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-    console.log(resp.data);
-    res.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+    res.json({data: resp.data});
     cookieToken = resp.headers['set-cookie'];
+    
 
   })
   .catch(err => {

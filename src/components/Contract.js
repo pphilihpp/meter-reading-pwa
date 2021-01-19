@@ -16,14 +16,14 @@ const Contract = () => {
             //============
         //Variables
         //User - Authenitcation
-        const user = process.env.REACT_APP_API_USERNAME;
-        const pass = process.env.REACT_APP_API_PASSWORD;
-        const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
+        // const user = process.env.REACT_APP_API_USERNAME;
+        // const pass = process.env.REACT_APP_API_PASSWORD;
+        //const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
         let cookieToken = '';
 
         const userData = {
-            username: user,
-            password: pass
+            username: 'techlabs',
+            password: 'test'
         }
     
         //===========
@@ -37,19 +37,18 @@ const Contract = () => {
         //========Axios calls=========
         await axios({
             method: 'POST',
-            withCredentials: true,
-            url: process.env.REACT_APP_API_URL + '/app/session',       //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
-            headers: {
-                'Authorization': `Basic ${auth}`,
-                'Content-Type': 'application/json'},
+             withCredentials: false,
+            url: 'http://localhost:9000/login',       //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
             data: userData
             })
             .then(resp => {
-                    console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-                    resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+                    // console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
+                    // resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
+                    // console.log(resp.data);
+                    // cookieToken = resp.headers['set-cookie'];
+                    // console.log(cookieToken)
+                    //console.log(resp);
                     console.log(resp.data);
-                    cookieToken = resp.headers['set-cookie'];
-                    console.log(cookieToken)
             })
             .catch(err => {
                 console.log('Error: Status ' + err);
