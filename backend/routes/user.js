@@ -43,9 +43,11 @@ router.post('/login', async (req, res) => {
     data: userData
   })
   .then(resp => {
-    res.json({data: resp.data});
     cookieToken = resp.headers['set-cookie'];
-    
+    res.json({
+      data: resp.data,
+      cookie: cookieToken
+        });
 
   })
   .catch(err => {

@@ -1,9 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import {faqData} from '../data/FaqData'
 import Accordion from './Accordion'
-//import Toggle from './Toggle'
 
 const Faq = () => {
 
