@@ -39,18 +39,28 @@ const Contracts = (props) => {
         e.preventDefault();
     }
 
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = dd + '.' + mm + '.' + yyyy;
 
     return (
         <div >
             <ContractHead>
                 <ContractInfo>
-                    <Adress>Musterstraße 30, 23546 Stadt {/** map dynamic Adress */}</Adress>
-                    <AccId>(Konto: 800005003){/*map dynamic AccId */}</AccId>
+                    <Adress>{props.data.premiseAddress.street} {props.data.premiseAddress.houseno}, {props.data.premiseAddress.zipcode} {props.data.premiseAddress.city}</Adress>
+                    <AccId> (Konto: {props.data.number})</AccId>
                 </ContractInfo>
                 <Symbols>
                     <ContractSymbols>
-                        <ContractSymbol><PowerOutlinedIcon />{/** map dynamic gas Icon */}</ContractSymbol>
-                        <ContractSymbol><WhatshotIcon />{/** map dynamic electricity Icon */}</ContractSymbol>
+                    {props.data.contracts.map((item, index) => (item.division === "ELECTRICITY" 
+                    ? 
+                    <ContractSymbol key={index}><PowerOutlinedIcon /></ContractSymbol>
+                    :
+                    <ContractSymbol key={index}><WhatshotIcon /></ContractSymbol>
+                    ))}
                     </ContractSymbols>
                     <ExpandIconWrapper onClick={() => toggle(!open)} active={open}><ExpandMoreIcon style={{ fontSize: 40 }}/></ExpandIconWrapper>
                 </Symbols>
@@ -58,31 +68,37 @@ const Contracts = (props) => {
 
             <ContractContainer style={expand}>
                 <ContractWrapper ref={ref}>
-                <Details>Typ{/** map dynamic Type*/} Vertrag: 013549812 {/** map dynamic ContractId*/}</Details>
-                <Details>Zähler: 1234566 {/** map dynamic MeterId*/}</Details>
-                <DataWrapper>
-                    <p>Ablesedatum</p>
-                    <DateInputWrapper>
-                        <BorderWrapper>
-                            <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
-                        </BorderWrapper>
-                    <Input type="date" onChange={(e) => setDateInput(e.target.value)} value={dateInput} placeholder="Z.B. 01.01.2021"/>
-                    </DateInputWrapper>
-                    <p>Neuer Zählerstand</p>
-                    <MeterInputWrapper>
-                        <Input type="text" onChange={(e) => setMeterInput(e.target.value)} value={meterInput} placeholder="Z.B. 1.932.123,95"/>
-                        <BorderWrapper>
-                            <DataType>kWh{/** map dynamic Value? */}</DataType>
-                        </BorderWrapper>
-                    </MeterInputWrapper>
-                    <Button 
-                        type="submit"
-                        primary="true"
-                        margin="10px 0 0 0"
-                        width="100%"
-                        onClick={handleSubmit}
-                    >Zählerstand eingeben</Button>
-                </DataWrapper> 
+                    {
+                        props.data.contracts.map((item, index) => (
+                            <ContractDetailContainer key={index}>
+                                <Details>{item.division} Vertrag: {item.number}</Details>
+                                <Details>Zähler: {item.actualMeter}</Details>
+                                <DataWrapper>
+                                    <p>Ablesedatum</p>
+                                    <DateInputWrapper>
+                                        <BorderWrapper>
+                                            <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
+                                        </BorderWrapper>
+                                    <Input type="date" onChange={(e) => setDateInput(e.target.value)} value={dateInput} placeholder={today}/>
+                                    </DateInputWrapper>
+                                    <p>Neuer Zählerstand</p>
+                                    <MeterInputWrapper>
+                                        <Input type="text" onChange={(e) => setMeterInput(e.target.value)} value={meterInput} placeholder={`alter Zählerstand ${item.meterReadingDetails[0].resultOld.result}`}/> 
+                                        <BorderWrapper>
+                                            <DataType>{item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}</DataType>
+                                        </BorderWrapper>
+                                    </MeterInputWrapper>
+                                    <Button 
+                                        type="submit"
+                                        primary="true"
+                                        margin="10px 0 0 0"
+                                        width="100%"
+                                        onClick={handleSubmit}
+                                    >Zählerstand eingeben</Button>
+                                </DataWrapper> 
+                            </ContractDetailContainer>
+                        ))
+                    }
                 </ContractWrapper>
             </ContractContainer>
         </div>
@@ -143,6 +159,9 @@ const ContractWrapper = styled(animated.div)`
     
 `
 //*************************** */
+
+
+const ContractDetailContainer = styled.div``
 
 const Details = styled.div`
     margin-top: 10px;

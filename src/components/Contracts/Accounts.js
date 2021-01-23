@@ -13,6 +13,7 @@ const Accounts = (props) => {
     useEffect(() => {
         getContractData (props.token);
         console.log(contractData);
+        console.log(contractData);
     }, [props.token])
 
     async function getContractData (token){
