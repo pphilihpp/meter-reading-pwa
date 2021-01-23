@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import {faqData} from '../data/FaqData'
+import {faqData} from '../../data/FaqData'
 import Accordion from './Accordion'
 
 const Faq = () => {

@@ -7,21 +7,6 @@ import PropTypes from 'prop-types'
 import {Button} from './Button'
 //import axios from 'axios'
 
-async function loginUser(credentials){ 
-    await axios({
-    method: 'POST',
-    withCredentials: false,
-    url: 'http://localhost:9000/login', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
-    data: credentials
-    })
-    .then(resp => {
-        console.log(resp.data);
-        console.log(resp.cookie);
-    })
-    .catch(err => {
-        console.log('Error: Status ' + err);
-    });
-}
 
 export default function Login({ setToken }) {
 
@@ -32,22 +17,36 @@ export default function Login({ setToken }) {
     //     username: 'techlabs',
     //     password: 'test'
     // }
+    function validateForm() {
+        return username.length > 0 && password.length > 0;
+    }
 
     const handleSubmit=async (e) => {
         e.preventDefault();
         //submit the current entry
-        const token = loginUser({
+        loginUser({
             username, 
             password
         });
         //console.log(userData);
-        setToken(token);
+        //setToken(token);
+        //console.log(token);
     }
 
-    function validateForm() {
-        return username.length > 0 && password.length > 0;
-    }
-    
+    async function loginUser(credentials){ 
+        await axios({
+        method: 'POST',
+        withCredentials: false,
+        url: 'http://localhost:9000/login', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+        data: credentials
+        })
+        .then(resp => {
+            setToken(resp.data.cookie);
+        })
+        .catch(err => {
+            console.log('Error: Status ' + err);
+        });
+    }    
 
     return (
     <LoginContainer>

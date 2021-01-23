@@ -5,10 +5,11 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import Login from './components/Login';
 import Navbar from './components/Navbar';
-import Contract from './components/Contract';
-import Faq from './components/Faq';
+//import Contract from './components/Contract';
+import Faq from './components/Faq/Faq';
 import Logout from './components/Logout';
 import GlobalStyle from './components/styles/GlobalStyles'
+import Accounts from './components/Contracts/Accounts';
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
             {/* <Route path="/login" component={Login} />  */}
             <Route exact path="/" >
               <Navbar />
-              <Contract />
+              <Accounts token={token}/>
               {/* <Footer /> */}
             </Route>
             <Route path="/faq">
@@ -34,7 +35,7 @@ function App() {
             </Route>
             <Route path="/logout">
               <Navbar />
-              <Logout />
+              <Logout token={token}/>
               {/* <Footer /> */}
             </Route>
           </Switch>
