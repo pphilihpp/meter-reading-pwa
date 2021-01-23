@@ -1,14 +1,37 @@
 import React from 'react'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Button } from './Button'
 
-const Logout = () => {
+const Logout = ({setToken, fullName}) => {
+
+    async function logoutUser () {
+        await axios({ 
+            method: 'DELETE',
+            withCredentials: false,
+            url: 'http://localhost:9000/logout', //process.env.API_URL + '/app/session',
+            data: '' 
+        })
+        .then(resp =>{ 
+            console.log('Logout erfolgreich');
+            console.log('Status: ' + resp.status);
+        })
+        .catch(err => {
+            console.log('Error: Status ' + err.response.status);
+        });
+    };
+
+    const handleOnClick = () => {
+        logoutUser();
+        setToken();
+    } 
+
     return (
         <LogoutWrapper>
-            <LogoutContent>Sie sind angemeldet als ...{/* Map dynamic content (name) */}</LogoutContent>
-            <Link to="/login">
-                <Button big="true">Abmelden</Button>
+            <LogoutContent>Sie sind angemeldet als {fullName}</LogoutContent>
+            <Link to="/">
+                <Button big="true" onClick={handleOnClick}>Abmelden</Button>
             </Link>
         </LogoutWrapper>
     )

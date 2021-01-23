@@ -13,7 +13,8 @@ import Accounts from './components/Contracts/Accounts';
 
 function App() {
 
-  const [token, setToken] = useState()
+  const [token, setToken] = useState();
+  const [fullName, setFullName] = useState();
 
   return (
     <div>
@@ -35,12 +36,12 @@ function App() {
             </Route>
             <Route path="/logout">
               <Navbar />
-              <Logout token={token}/>
+              <Logout token={token} setToken={setToken} fullName={fullName}/>
               {/* <Footer /> */}
             </Route>
           </Switch>
           :
-          <Login setToken={setToken}/> 
+          <Login setToken={setToken} setFullName={setFullName}/> 
         }
       </BrowserRouter>
     </div>

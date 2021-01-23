@@ -8,7 +8,7 @@ import {Button} from './Button'
 //import axios from 'axios'
 
 
-export default function Login({ setToken }) {
+export default function Login({ setToken, setFullName }) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -21,7 +21,7 @@ export default function Login({ setToken }) {
         return username.length > 0 && password.length > 0;
     }
 
-    const handleSubmit=async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         //submit the current entry
         loginUser({
@@ -42,6 +42,8 @@ export default function Login({ setToken }) {
         })
         .then(resp => {
             setToken(resp.data.cookie);
+            setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
+            //console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
         })
         .catch(err => {
             console.log('Error: Status ' + err);
