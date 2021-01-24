@@ -8,7 +8,7 @@ const Logout = ({setToken, fullName}) => {
 
     async function logoutUser () {
         await axios({ 
-            method: 'DELETE',
+            method: 'GET',
             withCredentials: false,
             url: 'http://localhost:9000/logout', //process.env.API_URL + '/app/session',
             data: '' 
