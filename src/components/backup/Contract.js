@@ -1,7 +1,9 @@
+// This File is just there in case sometthing has to get recovered
+
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import {Button} from './Button'
+import {Button} from '../Button'
 import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -13,46 +15,37 @@ const Contract = () => {
     var [meterInput, setMeterInput] = useState("");
     var [dateInput, setDateInput] = useState("");
 
-            //============
-        //Variables
-        //User - Authenitcation
-        // const user = process.env.REACT_APP_API_USERNAME;
-        // const pass = process.env.REACT_APP_API_PASSWORD;
-        //const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
-        let cookieToken = '';
+        //============
+    //Variables
+    //User - Authentication
+    let cookieToken = '';
 
-        const userData = {
-            username: 'techlabs',
-            password: 'test'
-        }
-    
-        //===========
+    const userData = {
+        username: 'techlabs',   //process.env.REACT_APP_API_USERNAME,
+        password: 'test'        //process.env.REACT_APP_API_PASSWORD
+    }
+
+    //===========
 
     const handleSubmit=async (e) => {
         e.preventDefault();
         //submit the current entry
-        setMeterInput("");
-        setDateInput("");
         console.log(userData);
-        //========Axios calls=========
         await axios({
             method: 'POST',
-             withCredentials: false,
-            url: 'http://localhost:9000/login',       //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+            withCredentials: false,
+            url: 'http://localhost:9000/login', //url: process.env.API_URL + '/app/session',
             data: userData
             })
             .then(resp => {
-                    // console.log('Login erfolgreich! Willkommen User: ' + resp.data.username);
-                    // resp.send('Login erfolgreich! Willkommen User: ' + resp.data.username);
-                    // console.log(resp.data);
-                    // cookieToken = resp.headers['set-cookie'];
-                    // console.log(cookieToken)
-                    //console.log(resp);
-                    console.log(resp.data);
+                console.log(resp.data);
             })
             .catch(err => {
                 console.log('Error: Status ' + err);
             });
+        //Clear Input
+        setMeterInput("");
+        setDateInput("");
     }
 
 

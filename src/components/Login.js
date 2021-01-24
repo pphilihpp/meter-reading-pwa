@@ -1,29 +1,59 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
-import {Button} from './Button'
+import axios from 'axios'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+
+import {Button} from './Button'
 //import axios from 'axios'
 
-function Login() {
+
+export default function Login({ setToken, setFullName }) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-
+    // const userData = {
+    //     username: 'techlabs',
+    //     password: 'test'
+    // }
     function validateForm() {
         return username.length > 0 && password.length > 0;
-        //valdiate with API
     }
-    
 
-    function handleSubmit(e){
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        //submit the current entry
+        loginUser({
+            username, 
+            password
+        });
+        //console.log(userData);
+        //setToken(token);
+        //console.log(token);
     }
+
+    async function loginUser(credentials){ 
+        await axios({
+        method: 'POST',
+        withCredentials: false,
+        url: 'http://localhost:9000/login', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+        data: credentials
+        })
+        .then(resp => {
+            setToken(resp.data.cookie);
+            setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
+            //console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
+        })
+        .catch(err => {
+            console.log('Error: Status ' + err);
+        });
+    }    
 
     return (
     <LoginContainer>
         <LoginTitle>Login</LoginTitle>
-        <FormWrapper onSubmit={handleSubmit}>
+        <FormWrapper>
             <InputContainer>
                 <Input type="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="E-Mail eingeben"></Input>
                 <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passwort eingeben"></Input>
@@ -36,6 +66,7 @@ function Login() {
                     width="60vw"
                     type="submit" 
                     disabled={!validateForm()}
+                    onClick={handleSubmit}
                 >
                     Anmelden
                 </Button>
@@ -45,7 +76,9 @@ function Login() {
     )
 }
 
-export default Login
+Login.propTpyes = {
+    setToken: PropTypes.func.isRequired
+}
 
 const LoginContainer = styled.div`
     height: 80vh;

@@ -43,9 +43,11 @@ router.post('/login', async (req, res) => {
     data: userData
   })
   .then(resp => {
-    res.json({data: resp.data});
     cookieToken = resp.headers['set-cookie'];
-    
+    res.json({
+      data: resp.data,
+      cookie: cookieToken
+        });
 
   })
   .catch(err => {
@@ -54,6 +56,18 @@ router.post('/login', async (req, res) => {
 
 });
 
+
+//Meter-Reading Write Request
+/*
+router.post('/meter-reading/contract-accounts/:contract', async (req, res) => {
+  await axios({
+    method: 'POST',
+    withCredentials: true,
+    url: process.env.API_URL + '/app/meter-reading/contract-accounts/' + req.params.contract,
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
+  })
+});
+*/
 /*
 *********************************
 GET Requests to API
@@ -116,5 +130,3 @@ router.get('/logout', async (req, res) => {
 });
 
 module.exports = router;
-
-

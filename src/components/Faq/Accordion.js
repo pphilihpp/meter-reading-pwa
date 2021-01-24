@@ -7,30 +7,18 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 const Accordion = (props) => {
     const defaultHeight = "0px";
 
-    // Manages the open or cloased state of the accordion
-    const [open, toggle] = useState(false);
+    const [open, toggle] = useState(false); // Manages the open or cloased state of the accordion
+    const [contentHeight, setContentHeight] = useState(defaultHeight);  // The height of the content inside of the accordion
+    const [ref, { height }] = useMeasure(); // Gets the height of the element (ref)
 
-    // The height of the content inside of the accordion
-    const [contentHeight, setContentHeight] = useState(defaultHeight);
-
-    // Gets the height of the element (ref)
-    const [ref, { height }] = useMeasure();
-
-
-    // Animations
     const expand = useSpring({
         height: open ? `${contentHeight}px` : defaultHeight
     });
 
     useEffect(() => {
-        //Sets initial height
-        setContentHeight(height);
-      
-        //Adds resize event listener
-        window.addEventListener("resize", setContentHeight(height));
-      
-        // Clean-up
-        return window.removeEventListener("resize", setContentHeight(height));
+        setContentHeight(height); //Sets initial height
+        window.addEventListener("resize", setContentHeight(height));    //Adds resize event listener
+        return window.removeEventListener("resize", setContentHeight(height)); // Clean-up
       }, [height]);
 
     return (
