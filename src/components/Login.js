@@ -41,13 +41,17 @@ export default function Login({ setToken, setFullName }) {
         data: credentials
         })
         .then(resp => {
-            setToken(resp.data.cookie);
-            setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
-            //console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
+            resp.data.error ? 
+                console.log(resp.data.error) //Apply Function to show User login wasn't successful
+                : 
+                setToken(resp.data.cookie);
+                setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
+            // console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
+            // console.log(resp.data.error);
         })
-        .catch(err => {
-            console.log('Error: Status ' + err);
-        });
+        // .catch(err => {
+        //     console.log('Error: Status ' + err);
+        // });
     }    
 
     return (
