@@ -45,6 +45,7 @@ export default function Login({ setToken, setFullName }) {
                 console.log(resp.data.error) //Apply Function to show User login wasn't successful
                 : 
                 setToken(resp.data.cookie);
+                // console.log(resp.data.cookie);
                 setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
             // console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
             // console.log(resp.data.error);

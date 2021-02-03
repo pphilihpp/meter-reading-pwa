@@ -61,16 +61,25 @@ router.post('/login', async (req, res) => {
 
 
 //Meter-Reading Write Request
-/*
+
 router.post('/meter-reading/contract-accounts/:contract', async (req, res) => {
+  
   await axios({
     method: 'POST',
     withCredentials: true,
     url: process.env.API_URL + '/app/meter-reading/contract-accounts/' + req.params.contract,
-    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` },
+    data: req.body
   })
+  .then(resp => {
+    res.send(resp.data);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err);
+  });
+  // console.log(req.params.contract);
 });
-*/
+
 /*
 *********************************
 GET Requests to API

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {useSpring, animated} from 'react-spring'
 import { useMeasure } from "react-use";
+import axios from 'axios'
 
 import { Button } from '../Button';
 
@@ -37,14 +38,40 @@ const Contracts = (props) => {
 
     const handleSubmit=async (e) => {
         e.preventDefault();
+        //submitMeter();
+        props.data.contracts[0].meterReadingDetails[0].resultNew.result = meterInput;
+        props.data.contracts[0].meterReadingDetails[0].resultNew.readingdateTarget = today;
+        props.data.contracts[0].meterReadingDetails[0].resultNew.readingdateBilling = today;
+        console.log(props.data);
+        submitMeter(props.data);
     }
+
+    async function submitMeter(data){ 
+        await axios({
+        method: 'POST',
+        withCredentials: false,
+        url: 'http://localhost:9000/meter-reading/contract-accounts/000800005001', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+        data: data,
+        })
+        .then(resp => {
+            resp.data.error ? 
+                console.log(resp.data.error) //Apply Function to show User login wasn't successful
+                : 
+                console.log(resp.data);
+            // console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
+            // console.log(resp.data.error);
+        })
+        // .catch(err => {
+        //     console.log('Error: Status ' + err);
+        // });
+    }    
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-    today = dd + '.' + mm + '.' + yyyy;
+    today = yyyy + '-' + mm + '-' + dd + 'T00:00:00.000Z';
 
     return (
         <div >
