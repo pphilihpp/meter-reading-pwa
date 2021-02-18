@@ -18,35 +18,35 @@ const Contract = (props) => {
     }
     return (
         <div>
-           
-                    <ContractDetailContainer>
-                        <Details>{props.item.division} Vertrag: {props.item.number}</Details>
-                        <Details>Zähler: {props.item.actualMeter}</Details>
-                        <DataWrapper>
-                            <p>Ablesedatum</p>
-                            <DateInputWrapper>
-                                <BorderWrapper>
-                                    <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
-                                </BorderWrapper>
-                            <Input type="date" onChange={handleOnChangeDate} value={props.dateInput[props.index]} placeholder={props.today}/>
-                            </DateInputWrapper>
-                            <p>Neuer Zählerstand</p>
-                            <MeterInputWrapper>
-                                <Input type="text" onChange={handleOnChangeMeter} value={props.meterInput[props.index]} placeholder={`alter Zählerstand ${props.item.meterReadingDetails[0].resultOld.result}`}/> 
-                                <BorderWrapper>
-                                    <DataType>{props.item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}</DataType>
-                                </BorderWrapper>
-                            </MeterInputWrapper>
-                        </DataWrapper> 
-                    </ContractDetailContainer>
-            
+            <ContractDetailContainer>
+                <Details>{props.item.division} Vertrag: {props.item.number}</Details>
+                <Details>Zähler: {props.item.actualMeter}</Details>
+                <DataWrapper>
+                    <p>Ablesedatum</p>
+                    <DateInputWrapper>
+                        <BorderWrapper>
+                            <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
+                        </BorderWrapper>
+                    <Input type="date" onChange={handleOnChangeDate} value={props.dateInput[props.index]} placeholder={props.today}/>
+                    </DateInputWrapper>
+                    <p>Neuer Zählerstand</p>
+                    <MeterInputWrapper>
+                        <Input type="text" onChange={handleOnChangeMeter} value={props.meterInput[props.index]} placeholder={`alter Zählerstand ${props.item.meterReadingDetails[0].resultOld.result}`}/> 
+                        <BorderWrapper>
+                            <DataType>{props.item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}</DataType>
+                        </BorderWrapper>
+                    </MeterInputWrapper>
+                </DataWrapper> 
+            </ContractDetailContainer>
         </div>
     )
 }
 
 export default Contract
 
-const ContractDetailContainer = styled.div``
+const ContractDetailContainer = styled.div`
+    margin-bottom: 25px;
+`
 
 const Details = styled.div`
     margin-top: 10px;

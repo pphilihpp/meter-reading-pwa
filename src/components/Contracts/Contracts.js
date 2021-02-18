@@ -37,7 +37,6 @@ const Contracts = (props) => {
 
 
     const handleSubmit=async (e) => {
-        meterInput ? console.log('truthy') : console.log('falsy');
         e.preventDefault();
         //submitMeter();
         //console.log(meterInput);
@@ -109,7 +108,7 @@ const Contracts = (props) => {
                     <Button 
                         type="submit"
                         primary="true"
-                        margin="10px 0 0 0"
+                        margin="0px 0 30px 0"
                         width="100%"
                         onClick={handleSubmit}
                     >Zählerstand eingeben</Button>
@@ -168,8 +167,8 @@ const ContractContainer = styled(animated.div)`
     border-radius: 10px;
     font-size: 14px;
     overflow: hidden;
+    
 `
 const ContractWrapper = styled(animated.div)`
-    
 `
 //*************************** */

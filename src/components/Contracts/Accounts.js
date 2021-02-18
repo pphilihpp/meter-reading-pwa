@@ -47,4 +47,7 @@ const Accounts = (props) => {
 export default Accounts
 
 
-const AccountContainer = styled.div``
+const AccountContainer = styled.div`
+    margin-top: 10px;
+    margin-right: 5px;
+`
