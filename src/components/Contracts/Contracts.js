@@ -23,7 +23,8 @@ const Contracts = (props) => {
     //input states
     const [meterInput, setMeterInput] = useState([]);
     const [dateInput, setDateInput] = useState([]);
-
+    const [implausible, setImplausible] = useState(false);
+    const [confirmationNeeded, setConfirmationNeeded] = useState(false);
 
     const expand = useSpring({
         height: open ? `${contentHeight}px` : defaultHeight
@@ -35,19 +36,19 @@ const Contracts = (props) => {
         return window.removeEventListener("resize", setContentHeight(height));  // Clean-up
     }, [height]);
 
-
     const handleSubmit=async (e) => {
         e.preventDefault();
-        //submitMeter();
-        //console.log(meterInput);
-        meterInput.map((item, index) => (
-            props.data.contracts[index].meterReadingDetails[0].resultNew.result = item
-        ))
-        dateInput.map((item, index) => ((
-            props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today, //item,
+        meterInput.forEach((item, index) => {
+            props.data.contracts[index].meterReadingDetails[0].resultNew.result = item;
+            if (confirmationNeeded === true) {
+                props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
+            } 
+        })
+        dateInput.forEach((item, index) => {
+            props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today; //item,
             props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateBilling = today//item
-        )))
-        console.log(props.data);
+        })
+        //console.log(props.data);
         submitMeter(props.data);
     }
 
@@ -60,15 +61,11 @@ const Contracts = (props) => {
         })
         .then(resp => {
             resp.data.error ? 
-                console.log(resp.data.error) //Apply Function to show User login wasn't successful
+                console.log(resp.data.error) //Apply Function to show User action wasn't successful
                 : 
-                console.log(resp.data);
-            // console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
-            // console.log(resp.data.error);
+                resp.data.implausible ? setImplausible(true) : setImplausible(false);
+                resp.data.contracts[0].meterReadingDetails[0].resultNew.confirmed ? setConfirmationNeeded("confirmed"): setConfirmationNeeded(true);
         })
-        // .catch(err => {
-        //     console.log('Error: Status ' + err);
-        // });
     }    
 
     var today = new Date();
@@ -100,18 +97,24 @@ const Contracts = (props) => {
 
             <ContractContainer style={expand}>
                 <ContractWrapper ref={ref}>
-                    {
+                    {   
                         props.data.contracts.map((item, index) => (
                             <Contract item={item} key={index} index={index} meterInput={meterInput} setMeterInput={setMeterInput} dateInput={dateInput} setDateInput={setDateInput} today={today}/>
                         ))
                     }
+
+                    {(implausible&&(confirmationNeeded !== "confirmed")) ? <ErrMsg>Eingabe ist nicht plausibel</ErrMsg> : ""}
+                    {confirmationNeeded===true ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""}
+                    {confirmationNeeded==="confirmed" ? <SuccessMsg>Eingabe wurde bestätigt</SuccessMsg> : ""}
+
                     <Button 
                         type="submit"
                         primary="true"
                         margin="0px 0 30px 0"
                         width="100%"
                         onClick={handleSubmit}
-                    >Zählerstand eingeben</Button>
+                    > {confirmationNeeded===true ? "Zählerstand bestätigen" : "Zählerstand eingeben"}</Button>
+                    
                 </ContractWrapper>
             </ContractContainer>
         </div>
@@ -170,5 +173,16 @@ const ContractContainer = styled(animated.div)`
     
 `
 const ContractWrapper = styled(animated.div)`
+`
+
+const ErrMsg = styled.p`
+    color: darkred;
+    margin-bottom: 10px;
+    margin-top: -15px;
+`
+const SuccessMsg = styled.p`
+    color: darkgreen;
+    margin-bottom: 10px;
+    margin-top: -15px;
 `
 //*************************** */
