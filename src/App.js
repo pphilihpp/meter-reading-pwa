@@ -11,6 +11,21 @@ import Logout from './components/Logout';
 import GlobalStyle from './components/styles/GlobalStyles'
 import Accounts from './components/Contracts/Accounts';
 
+if (!window.Promise) {
+  window.Promise = Promise;
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(function () {
+      console.log('Service worker registered!');
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+}
+
 function App() {
 
   const [token, setToken] = useState();
