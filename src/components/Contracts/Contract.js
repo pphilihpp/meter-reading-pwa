@@ -3,17 +3,13 @@ import styled from 'styled-components'
 
 import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
 import grey from '@material-ui/core/colors/grey';
+import MeterInput from './MeterInput';
 
 const Contract = (props) => {
 
-    const handleOnChangeMeter = (e) => {
-        var input = [...props.meterInput];
-        input.splice(props.index, 1, e.target.value);
-        props.setMeterInput(input);
-    }
     const handleOnChangeDate = (e) => {
         var input = [...props.dateInput];
-        input.splice(props.index, 1, e.target.value);
+        input.splice(props.contractNo, 1, e.target.value);
         props.setDateInput(input);
     }
     return (
@@ -27,11 +23,11 @@ const Contract = (props) => {
                         <BorderWrapper>
                             <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
                         </BorderWrapper>
-                    <Input type="date" onChange={handleOnChangeDate} value={props.dateInput[props.index]} placeholder={props.today}/>
+                    <Input type="date" onChange={handleOnChangeDate} value={props.dateInput[props.contractNo]} placeholder={props.today}/>
                     </DateInputWrapper>
                     <p>Neuer Zählerstand</p>
                     <MeterInputWrapper>
-                        <Input type="text" onChange={handleOnChangeMeter} value={props.meterInput[props.index]} placeholder={`alter Zählerstand ${props.item.meterReadingDetails[0].resultOld.result}`}/> 
+                        <MeterInput data={props.data} setData={props.setData} contractNo={props.contractNo}/>
                         <BorderWrapper>
                             <DataType>{props.item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}</DataType>
                         </BorderWrapper>

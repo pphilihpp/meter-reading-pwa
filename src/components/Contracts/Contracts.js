@@ -21,6 +21,7 @@ const Contracts = (props) => {
     const [contentHeight, setContentHeight] = useState(defaultHeight); // The height of the content inside of the accordion
     const [ref, { height }] = useMeasure(); // Gets the height of the element (ref)
     //input states
+    const [data, setData] = useState(props.data)
     const [meterInput, setMeterInput] = useState([]);
     const [dateInput, setDateInput] = useState([]);
     const [implausible, setImplausible] = useState(false);
@@ -38,18 +39,18 @@ const Contracts = (props) => {
 
     const handleSubmit=async (e) => {
         e.preventDefault();
-        meterInput.forEach((item, index) => {
-            props.data.contracts[index].meterReadingDetails[0].resultNew.result = item;
-            if (confirmationNeeded === true) {
-                props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
-            } 
-        })
+        // meterInput.forEach((item, index) => {
+        //     props.data.contracts[index].meterReadingDetails[0].resultNew.result = item;
+        //     if (confirmationNeeded === true) {
+        //         props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
+        //     } 
+        // })
         dateInput.forEach((item, index) => {
             props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today; //item,
             props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateBilling = today//item
         })
         //console.log(props.data);
-        submitMeter(props.data);
+        submitMeter(data);
     }
 
     async function submitMeter(data){ 
@@ -63,8 +64,16 @@ const Contracts = (props) => {
             resp.data.error ? 
                 console.log(resp.data.error) //Apply Function to show User action wasn't successful
                 : 
-                resp.data.implausible ? setImplausible(true) : setImplausible(false);
-                resp.data.contracts[0].meterReadingDetails[0].resultNew.confirmed ? setConfirmationNeeded("confirmed"): setConfirmationNeeded(true);
+                setConfirmationNeeded("confirmed");
+                // resp.data.implausible ? 
+                //     setImplausible(true) 
+                //     : 
+                //     setImplausible(false);
+
+            // resp.data.contracts[0].meterReadingDetails[0].resultNew.confirmed ? 
+            //     setConfirmationNeeded("confirmed")
+            //     : 
+            //     setConfirmationNeeded(true);
         })
     }    
 
@@ -99,12 +108,12 @@ const Contracts = (props) => {
                 <ContractWrapper ref={ref}>
                     {   
                         props.data.contracts.map((item, index) => (
-                            <Contract item={item} key={index} index={index} meterInput={meterInput} setMeterInput={setMeterInput} dateInput={dateInput} setDateInput={setDateInput} today={today}/>
+                            <Contract item={item} key={index} contractNo={index} meterInput={meterInput} setMeterInput={setMeterInput} dateInput={dateInput} setDateInput={setDateInput} today={today} data={data} setData={setData}/>
                         ))
                     }
 
                     {(implausible&&(confirmationNeeded !== "confirmed")) ? <ErrMsg>Eingabe ist nicht plausibel</ErrMsg> : ""}
-                    {confirmationNeeded===true ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""}
+                    {/* {confirmationNeeded===true ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""} */}
                     {confirmationNeeded==="confirmed" ? <SuccessMsg>Eingabe wurde bestätigt</SuccessMsg> : ""}
 
                     <Button 

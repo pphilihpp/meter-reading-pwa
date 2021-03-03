@@ -12,8 +12,6 @@ const Accounts = (props) => {
 
     useEffect(() => {
         getContractData (props.token);
-        console.log(contractData);
-        console.log(contractData);
     }, [])
 
     async function getContractData (token){
