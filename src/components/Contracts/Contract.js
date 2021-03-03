@@ -4,14 +4,10 @@ import styled from 'styled-components'
 import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
 import grey from '@material-ui/core/colors/grey';
 import MeterInput from './MeterInput';
+import DateInput from './DateInput';
 
 const Contract = (props) => {
 
-    const handleOnChangeDate = (e) => {
-        var input = [...props.dateInput];
-        input.splice(props.contractNo, 1, e.target.value);
-        props.setDateInput(input);
-    }
     return (
         <div>
             <ContractDetailContainer>
@@ -23,7 +19,7 @@ const Contract = (props) => {
                         <BorderWrapper>
                             <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
                         </BorderWrapper>
-                    <Input type="date" onChange={handleOnChangeDate} value={props.dateInput[props.contractNo]} placeholder={props.today}/>
+                    <DateInput data={props.data} setData={props.setData} contractNo={props.contractNo}/>
                     </DateInputWrapper>
                     <p>Neuer Zählerstand</p>
                     <MeterInputWrapper>
@@ -84,13 +80,6 @@ const DataType = styled.div`
     align-items: center;
     justify-content: center;
     font-weight: 700;
-`
-
-const Input = styled.input`
-    height: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    padding-left: 5px;
 `
 
 const MeterInputWrapper = styled.div`

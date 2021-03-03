@@ -18,9 +18,10 @@ const DateInput = (props) => {
     }
 
     const changeData = (e) => {
-        // var newData=props.data;
-        // newData.contracts[props.contractNo].meterReadingDetails[0].resultNew.result=value;
-        // props.setData(newData);
+        var newData=props.data;
+        newData.contracts[props.contractNo].meterReadingDetails[0].resultNew.readingdateTarget = value;
+        newData.contracts[props.contractNo].meterReadingDetails[0].resultNew.readingdateBilling = value;
+        props.setData(newData);
     }
     return (
         <div>

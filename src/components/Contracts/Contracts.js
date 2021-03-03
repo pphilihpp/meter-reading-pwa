@@ -4,13 +4,13 @@ import {useSpring, animated} from 'react-spring'
 import { useMeasure } from "react-use";
 import axios from 'axios'
 
+import Contract from './Contract';
 import { Button } from '../Button';
 
 import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import Contract from './Contract';
 
 
 const Contracts = (props) => {
@@ -22,8 +22,8 @@ const Contracts = (props) => {
     const [ref, { height }] = useMeasure(); // Gets the height of the element (ref)
     //input states
     const [data, setData] = useState(props.data)
-    const [meterInput, setMeterInput] = useState([]);
-    const [dateInput, setDateInput] = useState([]);
+    // const [meterInput, setMeterInput] = useState([]);
+    // const [dateInput, setDateInput] = useState([]);
     const [implausible, setImplausible] = useState(false);
     const [confirmationNeeded, setConfirmationNeeded] = useState(false);
 
@@ -77,12 +77,12 @@ const Contracts = (props) => {
         })
     }    
 
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
+    // var today = new Date();
+    // var dd = String(today.getDate()).padStart(2, '0');
+    // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    // var yyyy = today.getFullYear();
 
-    today = yyyy + '-' + mm + '-' + dd + 'T00:00:00.000Z';
+    // today = yyyy + '-' + mm + '-' + dd + 'T00:00:00.000Z';
 
     return (
         <div>
@@ -108,7 +108,12 @@ const Contracts = (props) => {
                 <ContractWrapper ref={ref}>
                     {   
                         props.data.contracts.map((item, index) => (
-                            <Contract item={item} key={index} contractNo={index} meterInput={meterInput} setMeterInput={setMeterInput} dateInput={dateInput} setDateInput={setDateInput} today={today} data={data} setData={setData}/>
+                            <Contract 
+                                item={item} 
+                                key={index} 
+                                contractNo={index} 
+                                data={data} 
+                                setData={setData}/>
                         ))
                     }
 
