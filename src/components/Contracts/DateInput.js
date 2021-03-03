@@ -1,6 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
+import React, {useState} from 'react'
+// import styled from 'styled-components'
+import DatePicker, { registerLocale } from "react-datepicker";
+// import { setDefaultLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import de from 'date-fns/locale/es';
 registerLocale('de', de)
@@ -8,6 +9,7 @@ registerLocale('de', de)
 const DateInput = (props) => {
 
     const [value, setValue] = useState(new Date())
+
 
     const handleOnChange = (e) => {
         //useState is asynchron --> Solution: implement a check-btn, make it useful by connection a plausible check to it & change data only onClick --> create custom withPromiseHook e.g. https://ysfaran.github.io/blog/post/0002-use-state-with-promise/
@@ -29,7 +31,7 @@ const DateInput = (props) => {
                 locale="de"
                 dateFormat="dd.MM.yyyy" 
                 selected={value} 
-                onSelect={handleDateSelect} 
+                // onSelect={handleDateSelect} 
                 onChange={handleOnChange} />
         </div>
     )
@@ -37,9 +39,9 @@ const DateInput = (props) => {
 
 export default DateInput
 
-const StyledInput = styled.input`
-    height: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    padding-left: 5px;
-`
+// const StyledInput = styled.input`
+//     height: 25px;
+//     border: 1px solid rgba(0, 0, 0, 0.2);
+//     border-radius: 10px;
+//     padding-left: 5px;
+// `

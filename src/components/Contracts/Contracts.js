@@ -45,10 +45,10 @@ const Contracts = (props) => {
         //         props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
         //     } 
         // })
-        dateInput.forEach((item, index) => {
-            props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today; //item,
-            props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateBilling = today//item
-        })
+        // dateInput.forEach((item, index) => {
+        //     props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today; //item,
+        //     props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateBilling = today//item
+        // })
         //console.log(props.data);
         submitMeter(data);
     }
