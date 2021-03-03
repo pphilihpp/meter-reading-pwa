@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import de from 'date-fns/locale/es';
+registerLocale('de', de)
 
 const DateInput = (props) => {
 
@@ -22,7 +24,12 @@ const DateInput = (props) => {
     }
     return (
         <div>
-            <DatePicker selected={value} onSelect={handleDateSelect} onChange={handleOnChange} />
+            <DatePicker 
+                locale="de"
+                dateFormat="dd.MM.yyyy" 
+                selected={value} 
+                onSelect={handleDateSelect} 
+                onChange={handleOnChange} />
         </div>
     )
 }
