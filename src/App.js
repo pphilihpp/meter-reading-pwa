@@ -10,6 +10,7 @@ import Faq from './components/Faq/Faq';
 import Logout from './components/Logout';
 import GlobalStyle from './components/styles/GlobalStyles'
 import Accounts from './components/Contracts/Accounts';
+import Offline from './components/Offline'
 
 if (!window.Promise) {
   window.Promise = Promise;
@@ -25,6 +26,7 @@ if ('serviceWorker' in navigator) {
       console.log(err);
     });
 }
+
 
 function App() {
 
@@ -52,6 +54,11 @@ function App() {
             <Route path="/logout">
               <Navbar />
               <Logout token={token} setToken={setToken} fullName={fullName}/>
+              {/* <Footer /> */}
+            </Route>
+            <Route path="/offline">
+              <Navbar />
+              <Offline></Offline>
               {/* <Footer /> */}
             </Route>
           </Switch>

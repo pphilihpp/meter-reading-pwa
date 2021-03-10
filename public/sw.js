@@ -1,6 +1,6 @@
 
-var CACHE_STATIC_NAME = 'static_v1';
-var CACHE_DYNAMIC_NAME = 'dynamic_v2';
+var CACHE_STATIC_NAME = 'static_v10';
+var CACHE_DYNAMIC_NAME = 'dynamic_v10';
 
 self.addEventListener('install', function(event) {
   console.log('[Service Worker] Installing Service Worker ...', event);
@@ -17,16 +17,17 @@ self.addEventListener('install', function(event) {
           '../src/logo.svg',
           '../src/components/Button.js',
           '../src/components/Login.js',
-          '../src/components/Logout.js',
+          //'../src/components/Logout.js',
           '../src/components/Navbar.js',
-          '../src/data/FaqData.js',
+          '../src/components/Offline.js',
+          //'../src/data/FaqData.js',
           //'../src/components/backup/Contract.js',
           //'../src/components/backup/Footer.js',
           '../src/components/Contracts/Account.js',
           '../src/components/Contracts/Contract.js',
           '../src/components/Contracts/Contracts.js',
-          '../src/components/Faq/Accordion.js',
-          '../src/components/Faq/Faq.js',
+          //'../src/components/Faq/Accordion.js',
+          //'../src/components/Faq/Faq.js',
           '../src/components/styles/GlobalStyles.js'
         ]);
       })
@@ -49,7 +50,7 @@ self.addEventListener('activate', function(event) {
   return self.clients.claim();
 });
 
-//First Try:
+//First Try: 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)
@@ -66,13 +67,15 @@ self.addEventListener('fetch', function(event) {
                 })
             })
             .catch(function(err) {
-
+              return caches.open(CACHE_STATIC_NAME)
+              .then(function(cache) {
+                return cache.match('../src/components/Offline.js');
+              });
             });
         }
       })
   );
 });
-
 
 // Cache then Network
 //self.addEventListener('fetch', function(event) {
