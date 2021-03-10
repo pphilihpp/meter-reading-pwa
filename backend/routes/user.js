@@ -43,11 +43,13 @@ router.post('/login', async (req, res) => {
     data: userData
   })
   .then(resp => {
-    cookieToken = resp.headers['set-cookie'];
+    cookieToken = resp.headers['set-cookie'][1];
+    //cookieToke = cookieToken[1];
     res.json({
       data: resp.data,
-      cookie: cookieToken
+      cookie: cookieToken,
         });
+        console.log(cookieToken[1])
 
   })
   .catch(err => {
