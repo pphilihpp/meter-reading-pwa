@@ -15,7 +15,7 @@ const pass = process.env.API_PASSWORD;
 
 
 const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
-let cookieToken = 'cos-token=pt2PxedD9hqYxolfqDBLnwqgbeR2TiMy_o1XBkH1upQzScPc9mHt4Z1Fxjz0_xa2mV4gl9QwCzIzm3MeCFZsEw||; Path=/portal/app; HttpOnly';
+let cookieToken = '';
 let currentData = [];
 
 //Body Parser
