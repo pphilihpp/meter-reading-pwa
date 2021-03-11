@@ -40,30 +40,33 @@ function App() {
         {
           token ? 
           <Switch>
-            {/* <Route path="/login" component={Login} />  */}
             <Route exact path="/" >
               <Navbar />
               <Accounts token={token}/>
-              {/* <Footer /> */}
             </Route>
             <Route path="/faq">
               <Navbar />
               <Faq />
-              {/* <Footer /> */}
             </Route>
             <Route path="/logout">
               <Navbar />
               <Logout token={token} setToken={setToken} fullName={fullName}/>
-              {/* <Footer /> */}
             </Route>
             <Route path="/offline">
               <Navbar />
               <Offline></Offline>
-              {/* <Footer /> */}
             </Route>
           </Switch>
           :
-          <Login setToken={setToken} setFullName={setFullName}/> 
+          <Switch>
+            <Route exact path="/offline">
+              <Navbar />
+              <Offline></Offline>
+            </Route>
+            <Route path="/">
+              <Login setToken={setToken} setFullName={setFullName}/> 
+            </Route>
+          </Switch>
         }
       </BrowserRouter>
     </div>
