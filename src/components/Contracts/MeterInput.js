@@ -15,7 +15,6 @@ const MeterInput = (props) => {
     useEffect(() => {
         if(value) {
             changeData();
-            console.log(value);
         }
     }, [value])
 

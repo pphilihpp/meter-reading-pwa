@@ -22,8 +22,6 @@ const Contracts = (props) => {
     const [ref, { height }] = useMeasure(); // Gets the height of the element (ref)
     //input states
     const [data, setData] = useState(props.data)
-    // const [meterInput, setMeterInput] = useState([]);
-    // const [dateInput, setDateInput] = useState([]);
     const [implausible, setImplausible] = useState(false);
     const [confirmationNeeded, setConfirmationNeeded] = useState(false);
 
@@ -41,18 +39,33 @@ const Contracts = (props) => {
         e.preventDefault();
         // meterInput.forEach((item, index) => {
         //     props.data.contracts[index].meterReadingDetails[0].resultNew.result = item;
-        //     if (confirmationNeeded === true) {
-        //         props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
-        //     } 
+            // if (confirmationNeeded === true) {
+            //     props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
+            // } 
         // })
         // dateInput.forEach((item, index) => {
         //     props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today; //item,
         //     props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateBilling = today//item
         // })
         //console.log(props.data);
+        props.data.contracts.forEach((item, index) => {
+            if (confirmationNeeded === true) {
+                data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
+            } 
+        })
         submitMeter(data);
     }
 
+    // function isImplausible(item, index){
+    //     if(
+    //         ((item.meterReadingDetails[0].resultNew.result*1.1) < data.contracts[index].meterReadingDetails[0].resultNew.result) || 
+    //         ((item.meterReadingDetails[0].resultNew.result*0.9) > data.contracts[index].meterReadingDetails[0].resultNew.result)) {
+
+    //             return true;
+    //     } else {
+    //         return false
+    //     }
+    // }
     async function submitMeter(data){ 
         await axios({
         method: 'POST',
@@ -64,25 +77,21 @@ const Contracts = (props) => {
             resp.data.error ? 
                 console.log(resp.data.error) //Apply Function to show User action wasn't successful
                 : 
-                setConfirmationNeeded("confirmed");
-                // resp.data.implausible ? 
-                //     setImplausible(true) 
-                //     : 
-                //     setImplausible(false);
-
+                console.log("succesful sent")
+                // setConfirmationNeeded("confirmed");
+            if(resp.data.implausible && !implausible){ 
+                setImplausible(true);
+                setConfirmationNeeded(true);
+            } else {
+                setImplausible(false);
+                setConfirmationNeeded("confirmed")
+            }
             // resp.data.contracts[0].meterReadingDetails[0].resultNew.confirmed ? 
             //     setConfirmationNeeded("confirmed")
             //     : 
             //     setConfirmationNeeded(true);
         })
     }    
-
-    // var today = new Date();
-    // var dd = String(today.getDate()).padStart(2, '0');
-    // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    // var yyyy = today.getFullYear();
-
-    // today = yyyy + '-' + mm + '-' + dd + 'T00:00:00.000Z';
 
     return (
         <div>
@@ -117,8 +126,8 @@ const Contracts = (props) => {
                         ))
                     }
 
-                    {(implausible&&(confirmationNeeded !== "confirmed")) ? <ErrMsg>Eingabe ist nicht plausibel</ErrMsg> : ""}
-                    {/* {confirmationNeeded===true ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""} */}
+                    {/* {(implausible&&(confirmationNeeded !== "confirmed")) ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""} */}
+                    {confirmationNeeded===true ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""}
                     {confirmationNeeded==="confirmed" ? <SuccessMsg>Eingabe wurde bestätigt</SuccessMsg> : ""}
 
                     <Button 

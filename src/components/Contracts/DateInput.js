@@ -26,7 +26,6 @@ const DateInput = (props) => {
         var formattedDate = format(value, "yyyy-MM-dd") + "T00:00:00.000Z"
         newData.contracts[props.contractNo].meterReadingDetails[0].resultNew.readingdateTarget = formattedDate;
         newData.contracts[props.contractNo].meterReadingDetails[0].resultNew.readingdateBilling = formattedDate;
-        console.log(newData.contracts[props.contractNo].meterReadingDetails[0].resultNew.readingdateBilling);
         props.setData(newData);
     }
     return (

@@ -48,8 +48,8 @@ router.post('/login', async (req, res) => {
     res.json({
       data: resp.data,
       cookie: cookieToken,
-        });
-        console.log(cookieToken[1])
+    });
+    console.log(cookieToken)
 
   })
   .catch(err => {
