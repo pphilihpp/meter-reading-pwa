@@ -10,6 +10,7 @@ import { Button } from '../Button';
 import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DoneIcon from '@material-ui/icons/Done';
 
 
 
@@ -24,9 +25,10 @@ const Contracts = (props) => {
     const [data, setData] = useState(props.data)
     const [implausible, setImplausible] = useState(false);
     const [confirmationNeeded, setConfirmationNeeded] = useState(false);
+    const [isConfirmed, setIsConfirmed] = useState(false)
 
     const expand = useSpring({
-        height: open ? `${contentHeight}px` : defaultHeight
+        height: open ? `${contentHeight+10}px` : defaultHeight
     });
 
     useEffect(() => {
@@ -35,37 +37,40 @@ const Contracts = (props) => {
         return window.removeEventListener("resize", setContentHeight(height));  // Clean-up
     }, [height]);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+          setConfirmationNeeded(false)
+          setIsConfirmed(false)
+        }, 5000);
+        return () => clearTimeout(timer);
+      }, [isConfirmed]);
+
     const handleSubmit=async (e) => {
         e.preventDefault();
-        // meterInput.forEach((item, index) => {
-        //     props.data.contracts[index].meterReadingDetails[0].resultNew.result = item;
-            // if (confirmationNeeded === true) {
-            //     props.data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
-            // } 
-        // })
-        // dateInput.forEach((item, index) => {
-        //     props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateTarget = today; //item,
-        //     props.data.contracts[index].meterReadingDetails[0].resultNew.readingdateBilling = today//item
-        // })
-        //console.log(props.data);
         props.data.contracts.forEach((item, index) => {
             if (confirmationNeeded === true) {
                 data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
             } 
         })
-        submitMeter(data);
+        if (!isConfirmed) {
+            submitMeter(data);
+        }
     }
 
-    // function isImplausible(item, index){
-    //     if(
-    //         ((item.meterReadingDetails[0].resultNew.result*1.1) < data.contracts[index].meterReadingDetails[0].resultNew.result) || 
-    //         ((item.meterReadingDetails[0].resultNew.result*0.9) > data.contracts[index].meterReadingDetails[0].resultNew.result)) {
-
-    //             return true;
-    //     } else {
-    //         return false
-    //     }
-    // }
+    function renderSwitch() {
+        switch (confirmationNeeded) {
+            case false: 
+                return "Zählerstand eingeben";
+            case true:
+                if(!isConfirmed) {
+                    return "Zählerstand bestätigen";
+                } else {
+                    return `Zählerstand erfolgreich versendet`
+                }
+            default:
+                return "default"
+        }
+    }
     async function submitMeter(data){ 
         await axios({
         method: 'POST',
@@ -84,7 +89,8 @@ const Contracts = (props) => {
                 setConfirmationNeeded(true);
             } else {
                 setImplausible(false);
-                setConfirmationNeeded("confirmed")
+                setIsConfirmed(true)
+                // setConfirmationNeeded("confirmed")
             }
             // resp.data.contracts[0].meterReadingDetails[0].resultNew.confirmed ? 
             //     setConfirmationNeeded("confirmed")
@@ -102,12 +108,12 @@ const Contracts = (props) => {
                 </ContractInfo>
                 <Symbols>
                     <ContractSymbols>
-                    {props.data.contracts.map((item, index) => (item.division === "ELECTRICITY" 
-                    ? 
-                    <ContractSymbol key={index}><PowerOutlinedIcon /></ContractSymbol>
-                    :
-                    <ContractSymbol key={index}><WhatshotIcon /></ContractSymbol>
-                    ))}
+                        {props.data.contracts.map((item, index) => (item.division === "ELECTRICITY" 
+                        ? 
+                        <ContractSymbol key={index}><PowerOutlinedIcon /></ContractSymbol>
+                        :
+                        <ContractSymbol key={index}><WhatshotIcon /></ContractSymbol>
+                        ))}
                     </ContractSymbols>
                     <ExpandIconWrapper onClick={() => toggle(!open)} active={open}><ExpandMoreIcon style={{ fontSize: 40 }}/></ExpandIconWrapper>
                 </Symbols>
@@ -122,21 +128,23 @@ const Contracts = (props) => {
                                 key={index} 
                                 contractNo={index} 
                                 data={data} 
-                                setData={setData}/>
+                                setData={setData}
+                                confirmationNeeded={confirmationNeeded}
+                                isConfirmed={isConfirmed}
+                                />
                         ))
                     }
-
-                    {/* {(implausible&&(confirmationNeeded !== "confirmed")) ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""} */}
-                    {confirmationNeeded===true ? <ErrMsg>Eingabe muss bestätigt werden</ErrMsg> : ""}
-                    {confirmationNeeded==="confirmed" ? <SuccessMsg>Eingabe wurde bestätigt</SuccessMsg> : ""}
-
                     <Button 
                         type="submit"
-                        primary="true"
-                        margin="0px 0 30px 0"
+                        primary={!confirmationNeeded}
+                        margin="5px 0 15px 0"
                         width="100%"
                         onClick={handleSubmit}
-                    > {confirmationNeeded===true ? "Zählerstand bestätigen" : "Zählerstand eingeben"}</Button>
+                        disabled={isConfirmed ? true : false}
+                    > 
+                    {renderSwitch()}
+                    {isConfirmed ? <DoneIcon style={{ fontSize: 20, margin: "-5px 0 -5px 15px"}}/> : ""}
+                    </Button>
                     
                 </ContractWrapper>
             </ContractContainer>
@@ -149,12 +157,11 @@ export default Contracts
 
 const ContractHead = styled.div`
     display: grid;
-    margin-left: 5px;
     grid-template-columns: 5fr 1fr;
-    border-bottom: solid 1px #587494;
+    border-bottom: solid 1px #002C5D;
     font-size: 14px;
     font-weight: 600;
-    color: #587494;
+    color: #002C5D;
 `
 const ContractInfo = styled.div`
 `
@@ -186,26 +193,14 @@ const ExpandIconWrapper = styled.div`
 //*************************** */
 
 const ContractContainer = styled(animated.div)`
-    background: rgba(172, 179, 191, 0.2);
-    padding: 0 15px 10px;
-    margin: 10px 0px 10px 30px;
-    border: 1.5px solid #587494;
-    border-radius: 10px;
     font-size: 14px;
+    margin: 10px 0px 10px 10px;
     overflow: hidden;
-    
 `
 const ContractWrapper = styled(animated.div)`
-`
-
-const ErrMsg = styled.p`
-    color: darkred;
-    margin-bottom: 10px;
-    margin-top: -15px;
-`
-const SuccessMsg = styled.p`
-    color: darkgreen;
-    margin-bottom: 10px;
-    margin-top: -15px;
+    background: rgba(172, 179, 191, 0.2);
+    padding: 0 15px;
+    border: 1.5px solid #002C5D;
+    border-radius: 10px;
 `
 //*************************** */

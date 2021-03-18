@@ -11,25 +11,33 @@ const Contract = (props) => {
     return (
         <div>
             <ContractDetailContainer>
-                <Details>{props.item.division} Vertrag: {props.item.number}</Details>
-                <Details>Zähler: {props.item.actualMeter}</Details>
+                <DetailsOne>{props.item.division} Vertrag: {props.item.number}</DetailsOne>
+                <DetailsTwo>Zähler: {props.item.actualMeter}</DetailsTwo>
                 <DataWrapper>
                     <p>Ablesedatum</p>
                     <DateInputWrapper>
-                        <BorderWrapper>
+                        {/* <BorderWrapper>
                             <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
-                        </BorderWrapper>
-                    <DateInput data={props.data} setData={props.setData} contractNo={props.contractNo}/>
+                        </BorderWrapper> */}
+                        <DateInput data={props.data} setData={props.setData} contractNo={props.contractNo}/>
                     </DateInputWrapper>
                     <p>Neuer Zählerstand</p>
-                    <MeterInputWrapper>
-                        <MeterInput data={props.data} setData={props.setData} contractNo={props.contractNo}/>
-                        <BorderWrapper>
+                    <MeterInputWrapper unit={props.item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}
+                        confirmationNeeded={props.confirmationNeeded} 
+                        isConfirmed={props.isConfirmed}>
+                        <MeterInput 
+                            data={props.data} 
+                            setData={props.setData} 
+                            contractNo={props.contractNo} 
+                            confirmationNeeded={props.confirmationNeeded} 
+                            isConfirmed={props.isConfirmed}/>
+                        {/* <BorderWrapper>
                             <DataType>{props.item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}</DataType>
-                        </BorderWrapper>
+                        </BorderWrapper> */}
                     </MeterInputWrapper>
                 </DataWrapper> 
             </ContractDetailContainer>
+                <Divider />
         </div>
     )
 }
@@ -37,28 +45,44 @@ const Contract = (props) => {
 export default Contract
 
 const ContractDetailContainer = styled.div`
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 `
 
-const Details = styled.div`
+const DetailsOne = styled.div`
     margin-top: 10px;
-    color: #587494;
+    color: #002C5D;
     font-weight: bold;
+    position: relative;
+
+    &:after {
+        content: "";
+        width: 200%;
+        height: 1.5px;
+        position: absolute;
+        left: -20px;
+        bottom: -7px;
+        background-color: rgba(88, 116, 148, 0.4);
+    }
+`
+const DetailsTwo = styled.div`
+    margin-top: 10px;
+    color: #002C5D;
+    font-weight: bold;
+    position: relative;
 `
 
 const DataWrapper = styled.div`
-    margin: 10px 0 0 50px;
+    margin: 10px 0 0 30px;
 
     & p {
-        font-weight: 600;
-        margin-bottom: 0;
+        font-weight: 400;
+        margin-bottom: 5px;
+        color: #002C5D;
     }
 `
 
 const DateInputWrapper = styled.div`
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    grid-gap: 5px;
+    margin-bottom: 10px;
 `
 
 const BorderWrapper = styled.div`
@@ -83,7 +107,35 @@ const DataType = styled.div`
 `
 
 const MeterInputWrapper = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 40px;
-    grid-gap: 5px;
+position: relative;
+overflow: hidden;
+    &:before {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: -5%;
+        height: 110%;
+        width: 70px;
+        border-left: 1px solid ${({confirmationNeeded, isConfirmed}) => ((confirmationNeeded && !isConfirmed) ? "red" : "rgba(88, 116, 148, 0.4)")};
+        z-index: 30;
+    }
+    &:after {
+        content: "${props => props.unit}";
+        text-align: center;
+        position: absolute;
+        right: 0;
+        top: 5px;
+        height: 100%;
+        width: 70px;
+        color: rgba(88, 116, 148, 0.6);
+    }
+`
+
+const Divider = styled.div`
+    margin-top: 0px;
+    margin-bottom: 10px;
+    width: 120%;
+    transform: translateX(-20px);
+    height: 2px;
+    background-color: #587494;
 `

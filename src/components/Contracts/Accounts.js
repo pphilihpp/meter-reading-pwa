@@ -46,6 +46,5 @@ export default Accounts
 
 
 const AccountContainer = styled.div`
-    margin-top: 10px;
-    margin-right: 5px;
+    margin: 10px 10px;
 `

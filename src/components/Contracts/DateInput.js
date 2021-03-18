@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-// import styled from 'styled-components'
+import styled from 'styled-components'
 import DatePicker, { registerLocale } from "react-datepicker";
 import { setDefaultLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -29,15 +29,34 @@ const DateInput = (props) => {
         props.setData(newData);
     }
     return (
-        <div>
+        <DatepickerCss>
             <DatePicker 
                 locale="de"
                 dateFormat="dd.MM.yyyy" 
                 selected={value} 
                 // onSelect={handleDateSelect} 
-                onChange={date => setValue(date)} />
-        </div>
+                onChange={date => setValue(date)} 
+            />
+        </DatepickerCss>
     )
 }
 
 export default DateInput
+
+const DatepickerCss = styled.div`
+
+    & > div.react-datepicker-wrapper {
+        width: 100%;
+    }
+    & > div > div.react-datepicker__input-container input {
+    height: 30px;
+    border: 1px solid #587494;
+    border-radius: 10px;
+    padding-left: 5px;
+    width: 100%;
+    color: #002C5D;
+    background-color: #FBFBFB;
+    text-align: center;
+    cursor: pointer;
+    }
+`

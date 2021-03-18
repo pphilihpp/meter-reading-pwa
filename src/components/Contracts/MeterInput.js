@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
+import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
+import grey from '@material-ui/core/colors/grey';
 
 const MeterInput = (props) => {
 
@@ -26,7 +28,7 @@ const MeterInput = (props) => {
 
     return (
         <div>
-            <StyledInput type="text" onChange={handleOnChange} value={value} placeholder={`this is a placeholder`}/> 
+            <StyledInput type="text" onChange={handleOnChange} value={value} placeholder="z.B.: 10200" confirmationNeeded={props.confirmationNeeded} isConfirmed={props.isConfirmed}/>
         </div>
     )
 }
@@ -34,8 +36,17 @@ const MeterInput = (props) => {
 export default MeterInput
 
 const StyledInput = styled.input`
-    height: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    height: 30px;
+    border: ${({confirmationNeeded, isConfirmed}) => ((confirmationNeeded && !isConfirmed) ? "1px solid red" : "1px solid #587494")};
     border-radius: 10px;
     padding-left: 5px;
+    width: 100%;
+    color: #002C5D;
+    background-color: #FBFBFB;
+    text-align: center;
+    position: relative;
+
+    &::placeholder {
+        font-weight: 300;
+    }
 `
