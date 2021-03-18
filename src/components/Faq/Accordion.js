@@ -44,11 +44,11 @@ const QuestionHeader = styled.div`
     display: grid;
     margin-left: 5px;
     padding-bottom: 5px;
-    border-bottom: solid 1px #587494;
+    border-bottom: solid 1px #002C5D;
     grid-template-columns: 5fr 1fr;
     font-size: 16px;
     font-weight: 500;
-    color: #587494;
+    color: #002C5D;
 `
 const QuestionContent = styled.div`
     display: flex;
@@ -64,7 +64,10 @@ const ExpandIconWrapper = styled.div`
     transform: ${(props) => props.active ? "rotate(180deg)" : ""};
 `
 const AnswerContainer = styled(animated.div)`
+    margin: 5px 5px;
     overflow: hidden;
 `
 const Answer = styled.div`
+    color: #002C5D;
+
 `

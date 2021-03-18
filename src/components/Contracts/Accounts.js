@@ -12,8 +12,6 @@ const Accounts = (props) => {
 
     useEffect(() => {
         getContractData (props.token);
-        console.log(contractData);
-        console.log(contractData);
     }, [])
 
     async function getContractData (token){
@@ -47,4 +45,6 @@ const Accounts = (props) => {
 export default Accounts
 
 
-const AccountContainer = styled.div``
+const AccountContainer = styled.div`
+    margin: 10px 10px;
+`

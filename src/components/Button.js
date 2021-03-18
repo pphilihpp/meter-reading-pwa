@@ -11,11 +11,11 @@ export const Button = styled.button`
     transition: 0.3s !important;
     border: 1px solid rgba(0, 0, 0, 0.2);
     background: ${({primary}) => (primary ? '#006695' : '#D9534F')};
-    border-radius: ${({ round }) => (round ? '20px' : '8px')};
+    border-radius: ${({ round }) => (round ? '20px' : '10px')};
     padding: ${({ big }) => (big ? '8px 24px' : '5px 16px')};
     margin: ${props => props.margin}; 
     width: ${props => props.width}; 
-    font-size: ${({ big }) => (big ? '20px' : '16px')};
+    font-size: +${({ big }) => (big ? '20px' : '16px')};
     font-weight: ${({ bold }) => (bold ? '600' : '400')};
 
     &:hover {
@@ -26,7 +26,8 @@ export const Button = styled.button`
     } 
 
     &:disabled {
-        background: #C0C0C0;
-        color: #000000;
+        background: rgba(172, 179, 191, 0.2);
+        color: #002C5D;
+        border-color: rgba(88, 116, 148, 0.4);
     }
 `

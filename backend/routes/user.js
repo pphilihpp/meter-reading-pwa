@@ -16,7 +16,7 @@ const pass = process.env.API_PASSWORD;
 
 const auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64');
 let cookieToken = '';
-
+let currentData = [];
 
 //Body Parser
 router.use(bodyParser.urlencoded({ extended: false }))
@@ -43,37 +43,51 @@ router.post('/login', async (req, res) => {
     data: userData
   })
   .then(resp => {
-    cookieToken = resp.headers['set-cookie'];
+    cookieToken = resp.headers['set-cookie'][1];
+    //cookieToke = cookieToken[1];
     res.json({
       data: resp.data,
-      cookie: cookieToken
-        });
+      cookie: cookieToken,
+    });
+    console.log(cookieToken)
 
   })
   .catch(err => {
     console.log('Error: Status ' + err);
+    res.json({
+      error: err
+    })
   });
 
 });
 
 
 //Meter-Reading Write Request
-/*
+
 router.post('/meter-reading/contract-accounts/:contract', async (req, res) => {
+  
   await axios({
     method: 'POST',
     withCredentials: true,
     url: process.env.API_URL + '/app/meter-reading/contract-accounts/' + req.params.contract,
-    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
+    headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` },
+    data: req.body
   })
+  .then(resp => {
+    res.send(resp.data);
+  })
+  .catch(err => {
+    console.log('Error: Status ' + err);
+  });
+  // console.log(req.params.contract);
 });
-*/
+
 /*
 *********************************
 GET Requests to API
 *********************************
 Meter-Reading Data for all Contracts
-Example: http://localhost:3000/meter-reading*/
+Example: http://localhost:9000/meter-reading*/
 router.get('/meter-reading', async (req, res) => {
 await axios({
     method: 'GET',
@@ -91,28 +105,30 @@ await axios({
 });
 
 //Meter-Reading Data for one Contract
-//Example: http://localhost:3000/meter-reading/contract-accounts/000800005001
+//Example: http://localhost:9000/meter-reading/contract-accounts/000800005001
 router.get('/meter-reading/contract-accounts/:contract', async (req, res) => {
-  await axios({
+   await axios({
     method: 'GET',
     withCredentials: true,
     url: process.env.API_URL + '/app/meter-reading/contract-accounts/' + req.params.contract,
     headers: { 'Cookie': cookieToken, 'Authorization': `Basic ${auth}` }
-  })
-  .then(resp => {
-    res.send(resp.data);
-  })
-  .catch(err => {
-    console.log('Error: Status ' + err.response.status);
+   })
+   .then(resp => {
+     res.send(resp.data);
+     currentData = resp.data;
+     console.log(currentData.contracts[0].meterReadingDetails[0].status);
+   })
+   .catch(err => {
+     console.log('Error: Status ' + err.response.status);
   });
-});
+ });
 
 /*
 *********************************
 DELETE Requests to API
 *********************************
 Logout
-Example: http://localhost:3000/logout */
+Example: http://localhost:9000/logout */
 router.get('/logout', async (req, res) => {
   await axios({ 
     method: 'DELETE',

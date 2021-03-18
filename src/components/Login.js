@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -12,7 +12,12 @@ export default function Login({ setToken, setFullName }) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [wrongCredentials, setWrongCredentials] = useState(false);
+    
 
+    useEffect(() => {
+        setWrongCredentials(false);
+      }, [username, password]);
     // const userData = {
     //     username: 'techlabs',
     //     password: 'test'
@@ -35,19 +40,25 @@ export default function Login({ setToken, setFullName }) {
 
     async function loginUser(credentials){ 
         await axios({
-        method: 'POST',
-        withCredentials: false,
-        url: 'http://localhost:9000/login', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
-        data: credentials
+            method: 'POST',
+            withCredentials: false,
+            url: 'http://localhost:9000/login', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+            data: credentials
         })
         .then(resp => {
-            setToken(resp.data.cookie);
-            setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
-            //console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
+            if(resp.data.error) {
+                setWrongCredentials(true);
+            } else {
+                setToken(resp.data.cookie);
+                // console.log(resp.data.cookie);
+                setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
+            }
+            // console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
+            // console.log(resp.data.error);
         })
-        .catch(err => {
-            console.log('Error: Status ' + err);
-        });
+        // .catch(err => {
+        //     console.log('Error: Status ' + err);
+        // });
     }    
 
     return (
@@ -55,8 +66,10 @@ export default function Login({ setToken, setFullName }) {
         <LoginTitle>Login</LoginTitle>
         <FormWrapper>
             <InputContainer>
-                <Input type="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="E-Mail eingeben"></Input>
-                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passwort eingeben"></Input>
+                <Input type="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="E-Mail eingeben" wrongCredentials={wrongCredentials}></Input>
+                {wrongCredentials ? <ErrMsg>Ungültiger Benutzername oder Passwort.</ErrMsg> : ""}
+                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passwort eingeben" wrongCredentials={wrongCredentials}></Input>
+                {wrongCredentials ? <ErrMsg>Ungültiger Benutzername oder Passwort.</ErrMsg> : ""}
             </InputContainer>
             <Link to="/">
                 <Button 
@@ -67,6 +80,7 @@ export default function Login({ setToken, setFullName }) {
                     type="submit" 
                     disabled={!validateForm()}
                     onClick={handleSubmit}
+                    margin="15px 0 0 0"
                 >
                     Anmelden
                 </Button>
@@ -109,11 +123,11 @@ const InputContainer = styled.div`
     height: 150px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
 `
 
 const Input = styled.input`
-    border: 2px solid #002C5D;
+    border: 2px solid ${({wrongCredentials}) => wrongCredentials ? "red" : "#002C5D"};
     border-radius: 8px;
     width: 100%;
     height: 40px;
@@ -124,4 +138,10 @@ const Input = styled.input`
         opacity: 0.4;
         font-weight: 600;
     }
+`
+const ErrMsg = styled.p`
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: red;
+    border-radius: 5px;
 `
