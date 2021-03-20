@@ -59,7 +59,13 @@ export default function Login({ setToken, setFullName }) {
         // .catch(err => {
         //     console.log('Error: Status ' + err);
         // });
-    }    
+    } 
+
+    navigator.serviceWorker.addEventListener('message', event => {
+        console.log(event.data.message, event.data.url);
+        // @Tim: Das ist der Event-Listener für die Nachricht vom ServiceWorker, wenn der Login nicht erfolgreich war.
+        //alert(event.data.alert);
+    });
 
     return (
     <LoginContainer>
