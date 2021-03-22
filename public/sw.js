@@ -1,6 +1,8 @@
+importScripts('idb.js');
+importScripts('utility.js');
 
-var CACHE_STATIC_NAME = 'static_v2';
-var CACHE_DYNAMIC_NAME = 'dynamic_v2';
+var CACHE_STATIC_NAME = 'static_v1';
+var CACHE_DYNAMIC_NAME = 'dynamic_v1';
 
 self.addEventListener('install', function(event) {
   console.log('[Service Worker] Installing Service Worker ...', event);
@@ -51,83 +53,123 @@ self.addEventListener('activate', function(event) {
 
 //Network with Cache Fallback
 self.addEventListener('fetch', function(event) {
- event.respondWith(
-   fetch(event.request)
-     .then(function(res) {
-       return caches.open(CACHE_DYNAMIC_NAME)
-               .then(function(cache) {
-                 cache.put(event.request.url, res.clone());
-                 return res;
-               })
-     })
-     .catch(function(err) {
-      if (event.request.method == "GET"){
-        return caches.match(event.request)
-          .then(function(response) {
-            if (response) {
-              return response;
-            }
-          })
-      } else if (event.request.method == "POST"){
-        // If it doesn't work, post a failure message to the client
-        console.log(event.clientId);
-        self.clients.get(event.clientId).then(function(client) {
-           client.postMessage({
-             message: "Post unsuccessful.",
-             alert: "Post unsuccessful." // A string we instantiated earlier
-           });
+  console.log(event.request.url.href);
+  if (event.request.method == "GET" && event.request.referrer == "http://localhost:3000/"){
+    event.respondWith(
+      fetch(event.request)
+      .then(function(res) {
+        return caches.open(CACHE_DYNAMIC_NAME)
+                .then(function(cache) {
+                  cache.put(event.request.url, res.clone());
+                  return res;
+                })
+      })
+      .catch(function() {
+          return caches.match(event.request)
+            .then(function(response) {
+              if (response) {
+                return response;
+              }
+            })
+
+      })
+    );
+  } else if (event.request.method == "POST" && event.request.referrer == "http://localhost:3000/"){
+    fetch(event.request)
+    .catch(function() {
+      // If it doesn't work, post a failure message to the client
+      self.clients.get(event.clientId).then(function(client) {
+        client.postMessage({
+          message: "Post unsuccessful.",
+          alert: "Post unsuccessful." // A string we instantiated earlier
         });
-       // Respond with the page that the request originated from
-       return caches.match(event.request.clone().referrer);
-      }
+      });
+      // Respond with the page that the request originated from
+      return caches.match(event.request.referrer);
     })
- );
+  }
+
 });
 
+//IndexedDB
 self.addEventListener('sync', function(event) {
   console.log('[Service Worker] Background syncing', event);
   if (event.tag === 'sync-new-posts') {
     console.log('[Service Worker] Syncing new Posts');
-    event.waitUntil(function(){
-      // readAllData('sync-posts')
-      //   .then(function(data) {
-      //     for (var dt of data) {
-            data = localStorage.getItem('sync-posts');
-            await axios({
+    event.waitUntil(
+      readAllData('sync-posts')
+        .then(function(data) {
+          for (var dt of data) {
+            fetch('http://localhost:9000/meter-reading/contract-accounts/000800005001', {
               method: 'POST',
               withCredentials: false,
-              url: 'http://localhost:9000/meter-reading/contract-accounts/000800005001', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
-              data: data,
-              })
-            // fetch('https://pwagram-99adf.firebaseio.com/posts.json', {
-            //   method: 'POST',
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //     'Accept': 'application/json'
-            //   },
-            //   body: JSON.stringify({
-            //     id: dt.id,
-            //     title: dt.title,
-            //     location: dt.location,
-            //     image: 'https://firebasestorage.googleapis.com/v0/b/pwagram-99adf.appspot.com/o/sf-boat.jpg?alt=media&token=19f4770c-fc8c-4882-92f1-62000ff06f16'
-            //   })
-            // })
-              .then(function(res) {
-                console.log('Sent data', res);
-                if (res.ok) {
-                  //deleteItemFromData('sync-posts', dt.id);
-                  localStorage.removeItem('sync-posts')
-                }
-              })
-              .catch(function(err) {
-                console.log('Error while sending data', err);
-              });
+              body: JSON.stringify(dt.data)
+            })
+            .then(function(res) {
+              console.log('Sent data', res);
+              if (res.ok) {
+                deleteItemFromData('sync-posts', dt.id); // Isn't working correctly!
+              }
+            })
+            .catch(function(err) {
+              console.log('Error while sending data', err);
+            });
           }
 
-        //})
+        })
     );
   }
 });
+
+// local Storage
+// self.addEventListener('sync', function(event) {
+//   console.log('[Service Worker] Background syncing', event);
+//   if (event.tag === 'sync-new-posts') {
+//     console.log('[Service Worker] Syncing new Posts');
+//     data = localStorage.getItem('sync-posts');
+//     console.log(data);
+
+
+  //     // readAllData('sync-posts')
+  //     //   .then(function(data) {
+  //     //     for (var dt of data) {
+  //           data = localStorage.getItem('sync-posts');
+  //           await axios({
+  //             method: 'POST',
+  //             withCredentials: false,
+  //             url: 'http://localhost:9000/meter-reading/contract-accounts/000800005001', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+  //             data: data,
+  //             })
+  //           // fetch('https://pwagram-99adf.firebaseio.com/posts.json', {
+  //           //   method: 'POST',
+  //           //   headers: {
+  //           //     'Content-Type': 'application/json',
+  //           //     'Accept': 'application/json'
+  //           //   },
+  //           //   body: JSON.stringify({
+  //           //     id: dt.id,
+  //           //     title: dt.title,
+  //           //     location: dt.location,
+  //           //     image: 'https://firebasestorage.googleapis.com/v0/b/pwagram-99adf.appspot.com/o/sf-boat.jpg?alt=media&token=19f4770c-fc8c-4882-92f1-62000ff06f16'
+  //           //   })
+  //           // })
+  //             .then(function(res) {
+  //               console.log('Sent data', res);
+  //               if (res.ok) {
+  //                 //deleteItemFromData('sync-posts', dt.id);
+  //                 localStorage.removeItem('sync-posts')
+  //               }
+  //             })
+  //             .catch(function(err) {
+  //               console.log('Error while sending data', err);
+  //             });
+  //         }
+
+  //       //})
+  //   );
+    
+//   }
+// });
 
 // Cache then Network
 // self.addEventListener('fetch', function(event) {

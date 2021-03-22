@@ -12,8 +12,6 @@ import WhatshotIcon from '@material-ui/icons/Whatshot';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DoneIcon from '@material-ui/icons/Done';
 
-
-
 const Contracts = (props) => {
     const defaultHeight = "0px";
     
@@ -55,30 +53,6 @@ const Contracts = (props) => {
         if (!isConfirmed) {
             submitMeter(data);
         }
-        // if ('serviceWorker' in navigator && 'SyncManager' in window) {
-        //     navigator.serviceWorker.ready
-        //       .then(function(sw) {
-        //         // var post = {
-        //         //     method: 'POST',
-        //         //     withCredentials: false,
-        //         //     url: 'http://localhost:9000/meter-reading/contract-accounts/000800005001',
-        //         //     data: data,
-        //         // };
-        //         var post = data;
-        //         store('sync-posts', post);
-        //         console.log('Your Post was saved for syncing!');
-        //         return sw.sync.register('sync-new-posts').then(function(){console.log('Registered!')});
-        //       });
-        //   } else {
-        //     props.data.contracts.forEach((item, index) => {
-        //         if (confirmationNeeded === true) {
-        //             data.contracts[index].meterReadingDetails[0].resultNew.confirmed = true;
-        //         } 
-        //     })
-        //     if (!isConfirmed) {
-        //         submitMeter(data);
-        //     }
-        //   }
     }
 
     navigator.serviceWorker.addEventListener('message', event => {
@@ -86,10 +60,6 @@ const Contracts = (props) => {
         // @Tim: Das ist der Event-Listener für die Nachricht vom ServiceWorker, wenn das Senden der Contracts nicht erfolgreich war.
         //alert(event.data.alert);
     });
-  
-    function store(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
-    }
 
     function renderSwitch() {
         switch (confirmationNeeded) {
@@ -131,6 +101,31 @@ const Contracts = (props) => {
             //     : 
             //     setConfirmationNeeded(true);
         })
+        .catch(function(err) {
+            if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                navigator.serviceWorker.ready
+                    .then(function(sw) {
+                    var post = {
+                        id: new Date().toISOString(),
+                        data: data
+                        };
+                    console.log(window);
+                    window.writeData('sync-posts', post)
+                        .then(function() {
+                            return sw.sync.register('sync-new-posts');
+                        })
+                        .then(function() {
+                            var data = {message: 'Your Post was saved for syncing!'};
+                            console.log('Your Post was saved for syncing!');
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                        });
+                    });
+                }  else {
+                    console.log(err);
+            }
+          });
     }    
 
     return (
