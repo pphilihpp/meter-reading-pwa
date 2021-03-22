@@ -53,7 +53,6 @@ self.addEventListener('activate', function(event) {
 
 //Network with Cache Fallback
 self.addEventListener('fetch', function(event) {
-  console.log(event.request.url.href);
   if (event.request.method == "GET" && event.request.referrer == "http://localhost:3000/"){
     event.respondWith(
       fetch(event.request)
