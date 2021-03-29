@@ -75,22 +75,22 @@ function App() {
           <Switch>
             <Route exact path="/" >
               <Navbar />
-              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner isOffline={isOffline} setGotReconnected={setGotReconnected} gotReconnected={gotReconnected}/> : ""}
-              <Accounts token={token}/>
+              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
+              <Accounts token={token} />
             </Route>
             <Route path="/faq">
               <Navbar />
-              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner isOffline={isOffline} setGotReconnected={setGotReconnected} gotReconnected={gotReconnected}/> : ""}
+              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
               <Faq />
             </Route>
             <Route path="/logout">
               <Navbar />
-              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner isOffline={isOffline} setGotReconnected={setGotReconnected} gotReconnected={gotReconnected}/> : ""}
+              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
               <Logout token={token} setToken={setToken} fullName={fullName}/>
             </Route>
             <Route path="/offline">
               <Navbar />
-              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner isOffline={isOffline} setGotReconnected={setGotReconnected} gotReconnected={gotReconnected}/> : ""}
+              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
               <Offline></Offline>
             </Route>
           </Switch>
@@ -101,7 +101,7 @@ function App() {
               <Offline></Offline>
             </Route>
             <Route path="/">
-              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner isOffline={isOffline} setGotReconnected={setGotReconnected} gotReconnected={gotReconnected}/> : ""}
+              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
               <Login setToken={setToken} setFullName={setFullName}/> 
             </Route>
           </Switch>

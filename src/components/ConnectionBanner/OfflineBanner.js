@@ -6,7 +6,7 @@ const OfflineBanner = () => {
     return (
         <Container>
             <Text>
-                Derzeit besteht keine Verbindung mit dem Internet! Ihre Eingaben werden gespeichert & abgesendet, sobald wieder eine Internetverbindung besteht.
+                Derzeit besteht keine Verbindung mit dem Internet!
             </Text>
             <Icon><WifiOffIcon fontSize="large"/></Icon>
         </Container>

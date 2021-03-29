@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import OfflineBanner from './OfflineBanner'
 import ReconnectedBanner from './ReconnectedBanner'
 
-const ConnectionBanner = ({isOffline, gotReconnected, setGotReconnected}) => {
+const ConnectionBanner = ({gotReconnected}) => {
 
     return (
         <Container>

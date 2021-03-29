@@ -11,6 +11,7 @@ import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DoneIcon from '@material-ui/icons/Done';
+import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 
 const Contracts = (props) => {
     const defaultHeight = "0px";
@@ -24,6 +25,8 @@ const Contracts = (props) => {
     const [implausible, setImplausible] = useState(false);
     const [confirmationNeeded, setConfirmationNeeded] = useState(false);
     const [isConfirmed, setIsConfirmed] = useState(false)
+
+    const [showOfflinePrompt, setShowOfflinePrompt] = useState(false)
 
     const expand = useSpring({
         height: open ? `${contentHeight+10}px` : defaultHeight
@@ -43,6 +46,13 @@ const Contracts = (props) => {
         return () => clearTimeout(timer);
       }, [isConfirmed]);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowOfflinePrompt(false)
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [showOfflinePrompt]);
+
     const handleSubmit=async (e) => {
         e.preventDefault();
         props.data.contracts.forEach((item, index) => {
@@ -59,9 +69,11 @@ const Contracts = (props) => {
         console.log(event.data.message, event.data.url);
         // @Tim: Das ist der Event-Listener für die Nachricht vom ServiceWorker, wenn das Senden der Contracts nicht erfolgreich war.
         //alert(event.data.alert);
+        setShowOfflinePrompt(true);
+        setIsConfirmed(true);
     });
 
-    function renderSwitch() {
+    function textSwitch() {
         switch (confirmationNeeded) {
             case false: 
                 return "Zählerstand eingeben";
@@ -166,15 +178,21 @@ const Contracts = (props) => {
                     <Button 
                         type="submit"
                         primary={!confirmationNeeded}
-                        margin="5px 0 15px 0"
+                        margin="5px 0 10px 0"
                         width="100%"
                         onClick={handleSubmit}
                         disabled={isConfirmed ? true : false}
                     > 
-                    {renderSwitch()}
+                    {textSwitch()}
                     {isConfirmed ? <DoneIcon style={{ fontSize: 20, margin: "-5px 0 -5px 15px"}}/> : ""}
                     </Button>
-                    
+                    {showOfflinePrompt ?
+                        <OfflinePrompt>
+                            <OfflineText>Die Eingabe wird abgesendet, sobald wieder eine Verbindung mit dem Internet besteht.</OfflineText>
+                            <ErrorOutlineOutlinedIcon style={{color: "#587494", margin: "-25px 10px 0 0"}}/>
+                        </OfflinePrompt>
+                        : ""
+                    }
                 </ContractWrapper>
             </ContractContainer>
         </div>
@@ -231,5 +249,16 @@ const ContractWrapper = styled(animated.div)`
     padding: 0 15px;
     border: 1.5px solid #002C5D;
     border-radius: 10px;
+`
+const OfflinePrompt = styled.div`
+    display: flex;
+    align-items: center;
+`
+const OfflineText = styled.p`
+    color: #587494;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 0 15px 0 15px;
 `
 //*************************** */
