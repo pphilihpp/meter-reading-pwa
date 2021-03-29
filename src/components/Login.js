@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import {Button} from './Button'
-//import axios from 'axios'
 
 
 export default function Login({ setToken, setFullName }) {
@@ -18,24 +17,17 @@ export default function Login({ setToken, setFullName }) {
     useEffect(() => {
         setWrongCredentials(false);
       }, [username, password]);
-    // const userData = {
-    //     username: 'techlabs',
-    //     password: 'test'
-    // }
+
     function validateForm() {
         return username.length > 0 && password.length > 0;
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //submit the current entry
         loginUser({
             username, 
             password
         });
-        //console.log(userData);
-        //setToken(token);
-        //console.log(token);
     }
 
     async function loginUser(credentials){ 
@@ -50,22 +42,16 @@ export default function Login({ setToken, setFullName }) {
                 setWrongCredentials(true);
             } else {
                 setToken(resp.data.cookie);
-                // console.log(resp.data.cookie);
                 setFullName(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`);
             }
-            // console.log(`${resp.data.data.personal.firstname} ${resp.data.data.personal.lastname}`)
-            // console.log(resp.data.error);
         })
-        // .catch(err => {
-        //     console.log('Error: Status ' + err);
-        // });
     } 
 
-    navigator.serviceWorker.addEventListener('message', event => {
-        console.log(event.data.message, event.data.url);
-        // @Tim: Das ist der Event-Listener für die Nachricht vom ServiceWorker, wenn der Login nicht erfolgreich war.
-        //alert(event.data.alert);
-    });
+    // navigator.serviceWorker.addEventListener('message', event => {
+    //     console.log(event.data.message, event.data.url);
+    //     //Das ist der Event-Listener für die Nachricht vom ServiceWorker, wenn der Login nicht erfolgreich war.
+    //     //alert(event.data.alert);
+    // });
 
     return (
     <LoginContainer>
@@ -105,7 +91,6 @@ const LoginContainer = styled.div`
     width: 100vw;
     overflow: hidden;
     padding: 0 50px;
-    /* padding: calc((100vw - 1300px) / 2); */
     color: #002C5D;
 `
 

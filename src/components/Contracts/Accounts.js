@@ -18,8 +18,7 @@ const Accounts = (props) => {
         await axios({
             method: 'GET',
             withCredentials: false,
-            url: 'http://localhost:9000/meter-reading',   //process.env.API_URL + '/app/meter-reading',
-            //headers: { 'Cookie': token }
+            url: 'http://localhost:9000/meter-reading',
         })
         .then(resp => {
             setContractData(resp.data);

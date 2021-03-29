@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import DatePicker, { registerLocale } from "react-datepicker";
-import { setDefaultLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import de from 'date-fns/locale/de';
 import {format} from 'date-fns'
@@ -34,7 +33,6 @@ const DateInput = (props) => {
                 locale="de"
                 dateFormat="dd.MM.yyyy" 
                 selected={value} 
-                // onSelect={handleDateSelect} 
                 onChange={date => setValue(date)} 
             />
         </DatepickerCss>

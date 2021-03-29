@@ -1,17 +1,14 @@
-//import logo from './logo.svg';
-//import './App.css';
 import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import { check, watch } from 'is-offline';
 
 import Login from './components/Login';
 import Navbar from './components/Navbar';
-//import Contract from './components/Contract';
+
 import Faq from './components/Faq/Faq';
 import Logout from './components/Logout';
 import GlobalStyle from './components/styles/GlobalStyles'
 import Accounts from './components/Contracts/Accounts';
-import Offline from './components/Offline'
 import ConnectionBanner from './components/ConnectionBanner/ConnectionBanner';
 
 if (!window.Promise) {
@@ -38,8 +35,8 @@ function App() {
   const [gotReconnected, setGotReconnected] = useState(false);
   const [notInitial, setNotInitial] = useState(false)
 
- 
-  let offlineStatus = bool => updateState(bool);//setIsOffline(bool);
+ //check offline status for OfflineBanner
+  let offlineStatus = bool => updateState(bool);
   check().then(offlineStatus);
   watch(offlineStatus);
 
@@ -88,18 +85,9 @@ function App() {
               {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
               <Logout token={token} setToken={setToken} fullName={fullName}/>
             </Route>
-            <Route path="/offline">
-              <Navbar />
-              {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
-              <Offline></Offline>
-            </Route>
           </Switch>
           :
           <Switch>
-            <Route exact path="/offline">
-              <Navbar />
-              <Offline></Offline>
-            </Route>
             <Route path="/">
               {(isOffline || (!isOffline && gotReconnected)) ? <ConnectionBanner gotReconnected={gotReconnected}/> : ""}
               <Login setToken={setToken} setFullName={setFullName}/> 

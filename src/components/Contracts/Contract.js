@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
-import grey from '@material-ui/core/colors/grey';
 import MeterInput from './MeterInput';
 import DateInput from './DateInput';
 
@@ -31,9 +29,6 @@ const Contract = (props) => {
                             contractNo={props.contractNo} 
                             confirmationNeeded={props.confirmationNeeded} 
                             isConfirmed={props.isConfirmed}/>
-                        {/* <BorderWrapper>
-                            <DataType>{props.item.meterReadingDetails[0].massRead === "KWH" ? "kWh" : "m\u00B3"}</DataType>
-                        </BorderWrapper> */}
                     </MeterInputWrapper>
                 </DataWrapper> 
             </ContractDetailContainer>
@@ -85,30 +80,9 @@ const DateInputWrapper = styled.div`
     margin-bottom: 10px;
 `
 
-const BorderWrapper = styled.div`
-    height: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    background-color: white;
-    `
-
-const DateIconWrapper = styled.div`
-    display: flex;
-    align-items:center;
-    justify-content: center;
-`
-
-const DataType = styled.div`
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-`
-
 const MeterInputWrapper = styled.div`
-position: relative;
-overflow: hidden;
+    position: relative;
+    overflow: hidden;
     &:before {
         content: "";
         position: absolute;

@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-// import {Link} from 'react-router-dom'
 
 export const Button = styled.button`
     white-space: no-wrap;
@@ -21,7 +20,6 @@ export const Button = styled.button`
     &:hover {
         background: ${({primary}) => (primary ? '#6387AF' : '#6387AF')};
         text-decoration: none;
-        /* color: #000000; */
         transform: translateY(-2px);
     } 
 

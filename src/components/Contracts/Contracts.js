@@ -20,6 +20,7 @@ const Contracts = (props) => {
     const [open, toggle] = useState(false); // Manages the open or cloased state of the accordion
     const [contentHeight, setContentHeight] = useState(defaultHeight); // The height of the content inside of the accordion
     const [ref, { height }] = useMeasure(); // Gets the height of the element (ref)
+
     //input states
     const [data, setData] = useState(props.data)
     const [implausible, setImplausible] = useState(false);
@@ -66,9 +67,6 @@ const Contracts = (props) => {
     }
 
     navigator.serviceWorker.addEventListener('message', event => {
-        console.log(event.data.message, event.data.url);
-        // @Tim: Das ist der Event-Listener für die Nachricht vom ServiceWorker, wenn das Senden der Contracts nicht erfolgreich war.
-        //alert(event.data.alert);
         setShowOfflinePrompt(true);
         setIsConfirmed(true);
     });
@@ -91,27 +89,17 @@ const Contracts = (props) => {
         await axios({
         method: 'POST',
         withCredentials: false,
-        url: 'http://localhost:9000/meter-reading/contract-accounts/000800005001', //url: process.env.API_URL + '/app/session', //http://localhost:3000/login
+        url: 'http://localhost:9000/meter-reading/contract-accounts/000800005001',
         data: data,
         })
         .then(resp => {
-            resp.data.error ? 
-                console.log(resp.data.error) //Apply Function to show User action wasn't successful
-                : 
-                console.log("succesful sent")
-                // setConfirmationNeeded("confirmed");
             if(resp.data.implausible && !implausible){ 
                 setImplausible(true);
                 setConfirmationNeeded(true);
             } else {
                 setImplausible(false);
                 setIsConfirmed(true)
-                // setConfirmationNeeded("confirmed")
             }
-            // resp.data.contracts[0].meterReadingDetails[0].resultNew.confirmed ? 
-            //     setConfirmationNeeded("confirmed")
-            //     : 
-            //     setConfirmationNeeded(true);
         })
         .catch(function(err) {
             if ('serviceWorker' in navigator && 'SyncManager' in window) {
@@ -149,11 +137,11 @@ const Contracts = (props) => {
                 </ContractInfo>
                 <Symbols>
                     <ContractSymbols>
-                        {props.data.contracts.map((item, index) => (item.division === "ELECTRICITY" 
-                        ? 
-                        <ContractSymbol key={index}><PowerOutlinedIcon /></ContractSymbol>
-                        :
-                        <ContractSymbol key={index}><WhatshotIcon /></ContractSymbol>
+                        {props.data.contracts.map((item, index) => 
+                        (item.division === "ELECTRICITY" ? 
+                            <ContractSymbol key={index}><PowerOutlinedIcon /></ContractSymbol>
+                            :
+                            <ContractSymbol key={index}><WhatshotIcon /></ContractSymbol>
                         ))}
                     </ContractSymbols>
                     <ExpandIconWrapper onClick={() => toggle(!open)} active={open}><ExpandMoreIcon style={{ fontSize: 40 }}/></ExpandIconWrapper>
@@ -172,7 +160,7 @@ const Contracts = (props) => {
                                 setData={setData}
                                 confirmationNeeded={confirmationNeeded}
                                 isConfirmed={isConfirmed}
-                                />
+                            />
                         ))
                     }
                     <Button 

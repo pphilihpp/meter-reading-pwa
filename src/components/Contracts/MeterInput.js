@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
-import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
-import grey from '@material-ui/core/colors/grey';
 
 const MeterInput = (props) => {
 
     const [value, setValue] = useState("")
-    //const [isUpdated, setIsUpdated] = useState(false)
 
     const handleOnChange = (e) => {
         setValue(e.target.value);

@@ -10,8 +10,7 @@ const Logout = ({setToken, fullName}) => {
         await axios({ 
             method: 'GET',
             withCredentials: false,
-            url: 'http://localhost:9000/logout', //process.env.API_URL + '/app/session',
-            data: '' 
+            url: 'http://localhost:9000/logout',
         })
         .then(resp =>{ 
             console.log('Logout erfolgreich');
@@ -41,7 +40,6 @@ export default Logout
 
 const LogoutWrapper = styled.div`
     padding: 0 5px;
-    /* padding: 0 calc((100vw - 1300px) / 2); */
 `
 const LogoutContent = styled.h6`
     margin-bottom: 120px;
