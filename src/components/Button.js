@@ -15,13 +15,13 @@ export const Button = styled.button`
     padding: ${({ big }) => (big ? '8px 24px' : '5px 16px')};
     margin: ${props => props.margin}; 
     width: ${props => props.width}; 
-    font-size: +${({ big }) => (big ? '20px' : '16px')};
+    font-size: ${({ big }) => (big ? '20px' : '16px')};
     font-weight: ${({ bold }) => (bold ? '600' : '400')};
 
     &:hover {
-        background: ${({primary}) => (primary ? '#009AE2' : '#C0C0C0')};
+        background: ${({primary}) => (primary ? '#6387AF' : '#6387AF')};
         text-decoration: none;
-        color: #000000;
+        /* color: #000000; */
         transform: translateY(-2px);
     } 
 

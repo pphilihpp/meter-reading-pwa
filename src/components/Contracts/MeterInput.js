@@ -28,7 +28,7 @@ const MeterInput = (props) => {
 
     return (
         <div>
-            <StyledInput type="text" onChange={handleOnChange} value={value} placeholder="z.B.: 10200" confirmationNeeded={props.confirmationNeeded} isConfirmed={props.isConfirmed}/>
+            <StyledInput type="number" onChange={handleOnChange} value={value} placeholder="z.B.: 10200" confirmationNeeded={props.confirmationNeeded} isConfirmed={props.isConfirmed}/>
         </div>
     )
 }
@@ -48,5 +48,16 @@ const StyledInput = styled.input`
 
     &::placeholder {
         font-weight: 300;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    &[type=number] {
+        -moz-appearance: textfield;
     }
 `
