@@ -133,7 +133,7 @@ const Contracts = (props) => {
             <ContractHead>
                 <ContractInfo>
                     <Adress>{props.data.premiseAddress.street} {props.data.premiseAddress.houseno}, {props.data.premiseAddress.zipcode} {props.data.premiseAddress.city}</Adress>
-                    <AccId> (Konto: {props.data.number})</AccId>
+                    <AccId> - Konto: {props.data.number} - </AccId>
                 </ContractInfo>
                 <Symbols>
                     <ContractSymbols>

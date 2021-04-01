@@ -14,9 +14,6 @@ const Contract = (props) => {
                 <DataWrapper>
                     <p>Ablesedatum</p>
                     <DateInputWrapper>
-                        {/* <BorderWrapper>
-                            <DateIconWrapper><DateRangeOutlinedIcon style={{color: grey[600]}}/></DateIconWrapper>
-                        </BorderWrapper> */}
                         <DateInput data={props.data} setData={props.setData} contractNo={props.contractNo}/>
                     </DateInputWrapper>
                     <p>Neuer Zählerstand</p>
