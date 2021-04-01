@@ -109,7 +109,6 @@ const Contracts = (props) => {
                         id: new Date().toISOString(),
                         data: data
                         };
-                    console.log(window);
                     window.writeData('sync-posts', post)
                         .then(function() {
                             return sw.sync.register('sync-new-posts');
